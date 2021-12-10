@@ -1,0 +1,57 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/study-api/src",
+  "monorepo": true,
+  "root": "apps/study-api",
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/study-api/tsconfig.app.json"
+  },
+  "projects": {
+    "study-api": {
+      "type": "application",
+      "root": "apps/study-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/study-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/study-api/tsconfig.app.json"
+      }
+    },
+    "session-api": {
+      "type": "application",
+      "root": "apps/session-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/session-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/session-api/tsconfig.app.json"
+      }
+    },
+    "common": {
+      "type": "application",
+      "root": "apps/common",
+      "entryFile": "main",
+      "sourceRoot": "apps/common/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/common/tsconfig.app.json"
+      }
+    },
+    "admin-api": {
+      "type": "application",
+      "root": "apps/admin-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/admin-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/admin-api/tsconfig.app.json"
+      }
+    },
+    "user-api": {
+      "type": "application",
+      "root": "apps/user-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-api/tsconfig.app.json"
+      }
+    }
+  }
+}
