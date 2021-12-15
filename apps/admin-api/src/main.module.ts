@@ -1,12 +1,12 @@
-import { Logger, Module } from '@nestjs/common';
-import { AdminApiController } from './admin-api.controller';
-import { AdminApiService } from './admin-api.service';
-import { CommonModule } from '../../common/src/common.module';
+import { Logger, Module} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import configuration from '../../study-api/src/config/env.configuration';
+
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
-import {RolesModule} from "../roles/roles.module";
+import configuration from './config/env.configuration';
+import { CommonModule } from '../../common/src/common.module';
+import { RolesModule } from './roles/roles.module';
+import { AdminApiModule } from './admin/admin-api.module';
 
 const logger = new Logger('MikroORM');
 
@@ -29,8 +29,7 @@ const logger = new Logger('MikroORM');
     }),
     CommonModule,
     RolesModule,
+    AdminApiModule,
   ],
-  controllers: [AdminApiController],
-  providers: [AdminApiService],
 })
-export class AdminApiModule {}
+export class MainModule {}
