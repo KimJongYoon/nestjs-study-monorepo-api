@@ -6,7 +6,7 @@ import configuration from '../../admin-api/src/config/env.configuration';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { SqlHighlighter } from '@mikro-orm/sql-highlighter';
 import { RolesModule } from '../../admin-api/src/roles/roles.module';
-import {SessionsModule} from "./sessions/sessions.module";
+import { SessionsModule } from './sessions/sessions.module';
 
 const logger = new Logger('MikroORM');
 

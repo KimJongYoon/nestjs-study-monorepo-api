@@ -10,5 +10,4 @@ export class CreateTestDto extends BaseDto {
   @ApiProperty({ example: '29', description: '나이' })
   @IsNumber()
   age: number;
-
 }

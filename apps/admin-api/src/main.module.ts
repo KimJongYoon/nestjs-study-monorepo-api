@@ -1,4 +1,4 @@
-import { Logger, Module} from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
 import { MikroOrmModule } from '@mikro-orm/nestjs';

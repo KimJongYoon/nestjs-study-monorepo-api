@@ -1,8 +1,19 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, ValidationPipe, Res, UseInterceptors} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ValidationPipe,
+  Res,
+  UseInterceptors,
+} from '@nestjs/common';
 import { TestService } from './test.service';
 import { CreateTestDto } from './dto/create-test.dto';
 import { UpdateTestDto } from './dto/update-test.dto';
-import {LocationInterceptor} from "../../common/src/set-location-interceptor.service";
+import { LocationInterceptor } from '../../common/src/set-location-interceptor.service';
 
 @Controller('test')
 export class TestController {

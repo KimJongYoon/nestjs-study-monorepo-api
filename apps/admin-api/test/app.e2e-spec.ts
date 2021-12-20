@@ -4,7 +4,7 @@ import request from 'supertest';
 import { AdminApiModule } from '../src/admin/admin-api.module';
 import { MainModule } from '../src/main.module';
 import { before } from '@nestjs/swagger/dist/plugin';
-import {Admin} from "../src/admin/entities/admin.entity";
+import { Admin } from '../src/admin/entities/admin.entity';
 
 describe('AdminApiController (e2e)', () => {
   let app: INestApplication;

@@ -15,5 +15,4 @@ export class AdminLoginStrategy extends PassportStrategy(Strategy, 'admin') {
     }
     return admin;
   }
-
 }

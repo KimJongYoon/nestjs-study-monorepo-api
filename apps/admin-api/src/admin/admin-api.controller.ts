@@ -13,7 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { LocationInterceptor } from '../../../common/src/set-location-interceptor.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { UpdateAdminDto } from './dto/update-admin.dto';
-import {JwtAuthPass} from "../../../session-api/src/jwt/jwt-auth-pass.decorator";
+import { JwtAuthPass } from '../../../session-api/src/jwt/jwt-auth-pass.decorator';
 
 @ApiTags('관리자 관리')
 @Controller('admin')
