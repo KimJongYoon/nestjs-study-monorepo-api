@@ -1,12 +1,6 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/study-api/src",
   "monorepo": true,
-  "root": "apps/study-api",
-  "compilerOptions": {
-    "webpack": true,
-    "tsConfigPath": "apps/study-api/tsconfig.app.json"
-  },
   "projects": {
     "study-api": {
       "type": "application",
