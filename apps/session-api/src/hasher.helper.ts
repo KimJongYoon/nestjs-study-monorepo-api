@@ -1,9 +1,8 @@
-import configuration from './config/env.configuration';
 import * as bcrypt from 'bcryptjs';
 
 export class HasherHelper {
   static async hash(key: string): Promise<string> {
-    const salt = configuration().secret_salt;
+    const salt = process.env.SECRET_SALT;
     return await bcrypt.hash(key, salt);
   }
 

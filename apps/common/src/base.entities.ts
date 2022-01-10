@@ -1,5 +1,5 @@
 import { PrimaryKey, Property, SerializedPrimaryKey } from '@mikro-orm/core';
-import { classToPlain, plainToClass } from 'class-transformer';
+import { instanceToPlain, plainToInstance } from 'class-transformer';
 
 export abstract class BaseEntity {
   @PrimaryKey()
@@ -15,7 +15,7 @@ export abstract class BaseEntity {
   updatedAt = new Date();
 
   toDto<T>(type: { new (): T }): T {
-    const jsonData: Record<string, any> = classToPlain(this);
-    return plainToClass(type, jsonData);
+    const jsonData: Record<string, any> = instanceToPlain(this);
+    return plainToInstance(type, jsonData);
   }
 }

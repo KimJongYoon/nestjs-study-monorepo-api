@@ -7,7 +7,6 @@ import { Admin } from '../../../admin-api/src/admin/entities/admin.entity';
 import { Role } from '../../../admin-api/src/roles/entities/role.entity';
 import { AdminApiService } from '../../../admin-api/src/admin/admin-api.service';
 import { RolesService } from '../../../admin-api/src/roles/roles.service';
-import configuration from '../config/env.configuration';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from '../jwt/jwt.strategy';
 
@@ -15,7 +14,7 @@ import { JwtStrategy } from '../jwt/jwt.strategy';
   imports: [
     MikroOrmModule.forFeature({ entities: [Admin, Role] }),
     JwtModule.register({
-      secret: configuration().jwt_secret,
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
   ],
