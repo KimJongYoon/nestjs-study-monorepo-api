@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  study-usin-dev-db:
+    image: arm64v8/mysql
+    container_name: study-usin-dev-db
+    environment :
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=admin1234
+      - MYSQL_DATABASE=usin
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=user1234
+    ports:
+      - 3307:3306
+    command: --default-authentication-plugin=mysql_native_password
+
+  study-partners-dev-db:
+    image: arm64v8/mysql
+    container_name: study-partners-dev-db
+    environment :
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_PASSWORD=admin1234
+      - MYSQL_DATABASE=partners
+      - MYSQL_USER=partners
+      - MYSQL_PASSWORD=partners1234
+    ports:
+      - 3308:3306
+    command: --default-authentication-plugin=mysql_native_password

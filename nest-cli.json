@@ -2,50 +2,62 @@
   "collection": "@nestjs/schematics",
   "monorepo": true,
   "projects": {
-    "study-api": {
-      "type": "application",
-      "root": "apps/study-api",
-      "entryFile": "main",
-      "sourceRoot": "apps/study-api/src",
+    "core": {
+      "type": "library",
+      "root": "libs/core",
+      "entryFile": "index",
+      "sourceRoot": "libs/core/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/study-api/tsconfig.app.json"
+        "tsConfigPath": "libs/core/tsconfig.lib.json"
       }
     },
-    "session-api": {
+    "api-usin": {
       "type": "application",
-      "root": "apps/session-api",
+      "root": "apps/api-usin",
       "entryFile": "main",
-      "sourceRoot": "apps/session-api/src",
+      "sourceRoot": "apps/api-usin/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/session-api/tsconfig.app.json"
+        "tsConfigPath": "apps/api-usin/tsconfig.app.json"
       }
     },
-    "common": {
+    "service-auth": {
       "type": "application",
-      "root": "apps/common",
+      "root": "apps/service-auth",
       "entryFile": "main",
-      "sourceRoot": "apps/common/src",
+      "sourceRoot": "apps/service-auth/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/common/tsconfig.app.json"
+        "tsConfigPath": "apps/service-auth/tsconfig.app.json"
       }
     },
-    "admin-api": {
+    "service-user": {
       "type": "application",
-      "root": "apps/admin-api",
+      "root": "apps/service-user",
       "entryFile": "main",
-      "sourceRoot": "apps/admin-api/src",
+      "sourceRoot": "apps/service-user/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/admin-api/tsconfig.app.json"
+        "tsConfigPath": "apps/service-user/tsconfig.app.json"
       }
     },
-    "user-api": {
+    "service-fishinggram": {
       "type": "application",
-      "root": "apps/user-api",
+      "root": "apps/service-fishinggram",
       "entryFile": "main",
-      "sourceRoot": "apps/user-api/src",
+      "sourceRoot": "apps/service-fishinggram/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/user-api/tsconfig.app.json"
+        "tsConfigPath": "apps/service-fishinggram/tsconfig.app.json"
+      }
+    },
+    "database": {
+      "type": "library",
+      "root": "libs/database",
+      "entryFile": "index",
+      "sourceRoot": "libs/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
     }
+  },
+  "compilerOptions": {
+    "webpack": true
   }
 }

@@ -1,0 +1,51 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  output = "../generated/client"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("PARTNERS_DATABASE_URL")
+}
+
+model Profile {
+  id             Int          @id @default(autoincrement())
+  title          String       @db.VarChar(255)
+  content        String?
+  published      Boolean      @default(false)
+  partnersUser   PartnersUser @relation(fields: [partnersUserId], references: [id], onDelete: Cascade) // fields: 테이블 내 필드, references: 참조할 테이블의 필드 
+  partnersUserId Int          @map("partners_user_id")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  createdBy      String       @map("created_by")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  updatedBy      String       @map("updated_by")
+  deletedAt      DateTime?    @map("deleted_at")
+  deletedBy      String?      @map("deleted_by")
+  useYn          BooleanTypes @default(Y) @map("use_yn")
+  remark         String?
+}
+
+model PartnersUser {
+  id        Int          @id @default(autoincrement())
+  createdAt DateTime     @default(now()) @map("created_at")
+  createdBy String       @map("created_by")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+  updatedBy String       @map("updated_by")
+  deletedAt DateTime?    @map("deleted_at")
+  deletedBy String?      @map("deleted_by")
+  useYn     BooleanTypes @default(Y) @map("use_yn")
+  email     String       @unique
+  name      String?
+  password  String       @map("password")
+  profile   Profile[]
+  remark    String?
+}
+
+enum BooleanTypes {
+  Y
+  N
+}

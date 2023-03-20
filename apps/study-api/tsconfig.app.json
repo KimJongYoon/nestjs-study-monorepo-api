@@ -1,9 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "declaration": false,
-    "outDir": "../../dist/apps/study-api"
-  },
-  "include": ["src/**/*", "../common/src/**/*"],
-  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
-}

@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/client"
+  previewFeatures = ["views"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("USIN_DATABASE_URL")
+}
+
+model User {
+  uid       String       @id
+  createdAt DateTime     @default(now()) @map("created_at")
+  createdBy String       @map("created_by")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+  updatedBy String       @map("updated_by")
+  deletedAt DateTime?    @map("deleted_at")
+  deletedBy String?      @map("deleted_by")
+  useYn     BooleanTypes @default(Y) @map("use_yn")
+  remark    String?
+  email     String       @unique
+  nickName  String?      @map("nick_name")
+  password  String       @map("password")
+}
+
+model Admin {
+  email     String       @id
+  createdAt DateTime     @default(now()) @map("created_at")
+  createdBy String       @map("created_by")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+  updatedBy String       @map("updated_by")
+  deletedAt DateTime?    @map("deleted_at")
+  deletedBy String?      @map("deleted_by")
+  useYn     BooleanTypes @default(Y) @map("use_yn")
+  remark    String?
+  nickName  String?      @map("nick_name")
+  password  String       @map("password")
+  posts     Post[]
+}
+
+model Post {
+  id         String       @id @default(uuid())
+  title      String       @db.VarChar(255)
+  content    String?
+  published  Boolean      @default(false)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  createdBy  String       @map("created_by")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  updatedBy  String       @map("updated_by")
+  deletedAt  DateTime?    @map("deleted_at")
+  deletedBy  String?      @map("deleted_by")
+  useYn      BooleanTypes @default(Y) @map("use_yn")
+  remark     String?
+  Admin      Admin        @relation(fields: [adminEmail], references: [email], onDelete: Cascade, onUpdate: NoAction)
+  adminEmail String
+}
+
+enum BooleanTypes {
+  Y
+  N
+}
