@@ -58,6 +58,8 @@
     }
   },
   "compilerOptions": {
+    "assets": ["**/*.proto"],
+    "watchAssets": true,
     "webpack": true
   }
 }

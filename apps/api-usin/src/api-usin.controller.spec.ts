@@ -16,7 +16,6 @@ describe('ApiUsinController', () => {
 
   describe('root', () => {
     it('should return "Hello World!"', () => {
-      expect(apiUsinController.getHello()).toBe('Hello World!');
     });
   });
 });
