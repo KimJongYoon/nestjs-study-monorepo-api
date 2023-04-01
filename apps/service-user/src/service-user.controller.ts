@@ -6,7 +6,7 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { AsyncApiPub } from 'nestjs-asyncapi';
-import { CreateUserDto } from '../../../libs/microservice/src/dto/create.user.dto';
+import { CreateUserDto } from './dto/create.user.dto';
 import { ServiceUserService } from './service-user.service';
 
 @Controller()

@@ -1,4 +1,4 @@
-export * from './dto/create.user.dto';
+export * from './config/nats.config.service';
 export * from './filter/rpc-to-http.exception.filter';
 export * from './interceptor/nats.logging.interceptor';
 export * from './models/user/user.model';

@@ -46,7 +46,7 @@ export class LoggingInterceptor implements NestInterceptor {
     REMOTE IP: [ ${remoteIP} ]
     URL : [ ${incomingMessage?.url} ] 
     METHOD : [ ${incomingMessage?.method} ]
-    HEADER UID : [ ${JSON.stringify(incomingMessage?.headers)} ]
+    HEADER : [ ${JSON.stringify(incomingMessage?.headers)} ]
     JWT : [ ${jwt} ]  
     QUERY : [ ${JSON.stringify(incomingMessage?.query)} ]
     PARAMS : [ ${JSON.stringify(incomingMessage?.params)} ]

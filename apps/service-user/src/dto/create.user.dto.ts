@@ -3,9 +3,9 @@ import {
   BcryptHelper,
   EntityBuilder,
   EntityValidator,
-} from '../../../core/src';
-import { Prisma } from '../../../database/src';
-import { UserModel } from '../models/user/user.model';
+} from '../../../../libs/core/src';
+import { Prisma } from '../../../../libs/database/src';
+import { UserModel } from '../../../../libs/microservice/src/models/user/user.model';
 
 export class CreateUserDto
   extends PickType(UserModel, ['uid', 'email', 'password', 'nickName'])

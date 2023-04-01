@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../../../libs/database/src';
-import { CreateUserDto } from '../../../libs/microservice/src/dto/create.user.dto';
+import { CreateUserDto } from './dto/create.user.dto';
 import { UserServiceException } from './exceptions/user.service-exception';
 import { ServiceUserRepository } from './service-user.repository';
 import { CreateUserValidator } from './validators/create.user.validator';

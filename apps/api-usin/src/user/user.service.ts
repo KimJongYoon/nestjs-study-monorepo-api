@@ -4,13 +4,13 @@ import { ClientProxy, NatsRecordBuilder } from '@nestjs/microservices';
 import * as nats from 'nats';
 import { firstValueFrom } from 'rxjs';
 import { UserModel } from '../../../../libs/microservice/src';
-import { CreateUserDto } from '../../../../libs/microservice/src/dto/create.user.dto';
+import { CreateUserDto } from './dto/create.user.dto';
 import { UserServiceException } from './exceptions/user.service-exception';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('USER_SERVICE') private readonly client: ClientProxy,
+    @Inject('NATS_CLIENT') private readonly client: ClientProxy,
     @Inject(REQUEST) private request,
   ) {}
 
