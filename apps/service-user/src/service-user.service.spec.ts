@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { User } from '../../../libs/database/src';
-import { CreateUserDto } from '../../../libs/microservice/src/dto/create.user.dto';
+import { CreateUserDto } from './dto/create.user.dto';
 import { ServiceUserRepository } from './service-user.repository';
 import { ServiceUserService } from './service-user.service';
 import { CreateUserValidator } from './validators/create.user.validator';

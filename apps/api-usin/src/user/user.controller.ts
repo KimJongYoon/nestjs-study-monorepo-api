@@ -8,7 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateResponse } from '../../../../libs/core/src/response/create.response';
-import { CreateUserDto } from '../../../../libs/microservice/src/dto/create.user.dto';
+import { CreateUserDto } from '../../../service-user/src/dto/create.user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('사용자 관리')

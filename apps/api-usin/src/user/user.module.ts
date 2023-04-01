@@ -1,27 +1,22 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ClientsModule } from '@nestjs/microservices';
+import { NatsConfigService } from '../../../../libs/microservice/src/config/nats.config.service';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
 @Module({
-  controllers: [UserController],
-  providers: [
-    {
-      provide: 'USER_SERVICE',
-      useFactory: (configService: ConfigService) =>
-        ClientProxyFactory.create({
-          transport: Transport.NATS,
-          options: {
-            servers: [configService.get('api-usin').microservice.url],
-            headers: { 'x-version': '1.0.0', author: 'mion' },
-            queue: 'users_queue',
-          },
-        }),
-      inject: [ConfigService],
-    },
-
-    UserService,
+  imports: [
+    ClientsModule.registerAsync([
+      {
+        name: 'NATS_CLIENT',
+        imports: [ConfigModule],
+        useClass: NatsConfigService,
+        inject: [ConfigService],
+      },
+    ]),
   ],
+  controllers: [UserController],
+  providers: [UserService],
 })
 export class UserModule {}

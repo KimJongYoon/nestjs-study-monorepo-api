@@ -9,12 +9,10 @@ import {
 import { HttpAdapterHost } from '@nestjs/core';
 
 @Catch()
-export class AllExceptionsFilter implements ExceptionFilter {
+export class ApiExceptionsFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: any, host: ArgumentsHost): void {
-    // In certain situations `httpAdapter` might not be available in the
-    // constructor method, thus we should resolve it here.
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx = host.switchToHttp();
@@ -29,6 +27,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
+
+    this.printExceptionLog(host, message);
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }
@@ -62,5 +62,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
       message = exception.message;
     }
     return message;
+  }
+
+  /**
+   * 예외 로그 출력
+   * @param host
+   * @param message
+   */
+  private printExceptionLog(host: ArgumentsHost, message: string) {
+    const requestId = host.getArgs()?.[0]?.requestId;
+    const requestTime = host.getArgs()?.[0]?.requestTime;
+    Logger.error(
+      `================ EXCEPTION REQUEST [REQUEST ID: ${requestId}] ${
+        Date.now() - requestTime
+      }ms ================ 
+  Message: ${message}
+`,
+      ApiExceptionsFilter.name,
+    );
   }
 }

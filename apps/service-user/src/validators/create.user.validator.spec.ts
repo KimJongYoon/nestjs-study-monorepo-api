@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsinDatabaseService } from '../../../../libs/database/src';
-import { CreateUserDto } from '../../../../libs/microservice/src/dto/create.user.dto';
+import { CreateUserDto } from '../dto/create.user.dto';
 import { CreateUserValidator } from './create.user.validator';
 
 jest.setTimeout(20 * 60 * 1000);
