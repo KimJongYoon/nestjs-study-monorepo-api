@@ -4,7 +4,8 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AsyncApiDocumentBuilder, AsyncApiModule } from 'nestjs-asyncapi';
 import { GlobalValidationPipe } from '../../../libs/core/src';
-import { HttpToRpcExceptionFilter } from '../../../libs/microservice/src/filter/http-to-rpc.exception.filter';
+import { NatsLoggingInterceptor } from '../../../libs/microservice/src';
+import { RpcToHttpExceptionFilter } from '../../../libs/microservice/src/filter/rpc-to-http.exception.filter';
 import { ServiceUserModule } from './service-user.module';
 
 async function bootstrap() {
@@ -12,7 +13,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.useGlobalPipes(new ValidationPipe(GlobalValidationPipe));
-  app.useGlobalFilters(new HttpToRpcExceptionFilter());
+  app.useGlobalFilters(new RpcToHttpExceptionFilter());
+  app.useGlobalInterceptors(new NatsLoggingInterceptor());
 
   const userConfig = configService.get('user');
   Logger.log(`Listening on port ${userConfig.port}`, 'Bootstrap');

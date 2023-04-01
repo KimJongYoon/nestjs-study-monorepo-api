@@ -13,8 +13,11 @@ import { UserService } from './user.service';
         ClientProxyFactory.create({
           transport: Transport.NATS,
           options: {
-            servers: [configService.get('api-usin').microservice.url],
-            headers: { 'x-version': '1.0.0', author: 'mion' },
+            servers: [configService.get('api-usin').microservice.user],
+            headers: {
+              'api-version': `${process.env.npm_package_version}`,
+              'api-from': `${configService.get('api-usin').name}`,
+            },
             queue: 'users_queue',
           },
         }),

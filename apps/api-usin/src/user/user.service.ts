@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { REQUEST } from '@nestjs/core';
 import { ClientProxy, NatsRecordBuilder } from '@nestjs/microservices';
 import * as nats from 'nats';
 import { firstValueFrom } from 'rxjs';
@@ -8,7 +9,10 @@ import { UserServiceException } from './exceptions/user.service-exception';
 
 @Injectable()
 export class UserService {
-  constructor(@Inject('USER_SERVICE') private readonly client: ClientProxy) {}
+  constructor(
+    @Inject('USER_SERVICE') private readonly client: ClientProxy,
+    @Inject(REQUEST) private request,
+  ) {}
 
   /**
    * 사용자 등록
@@ -18,7 +22,8 @@ export class UserService {
     try {
       // header
       const headers = nats.headers();
-      headers.set('requestId', '123123123123');
+      const requestId = this.request?.requestId ?? '';
+      headers.set('request-id', requestId.toString());
 
       const record = new NatsRecordBuilder(dto).setHeaders(headers).build();
 
