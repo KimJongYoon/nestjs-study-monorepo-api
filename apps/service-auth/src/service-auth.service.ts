@@ -71,7 +71,7 @@ export class ServiceAuthService {
 
     // 사용자 정보 조회
     const user = await firstValueFrom(
-      this.client.send(UserChannelEnum.FIND_ONE, record),
+      this.client.send(UserChannelEnum.FIND_ONE_USIN, record),
     );
 
     // jwt payload 설정

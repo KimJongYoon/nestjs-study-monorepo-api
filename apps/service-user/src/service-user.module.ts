@@ -6,6 +6,7 @@ import userConfig from './config/user.config';
 import { ServiceUserController } from './service-user.controller';
 import { ServiceUserRepository } from './service-user.repository';
 import { ServiceUserService } from './service-user.service';
+import { CommonUserValidator } from './validator/common.user.validator';
 import { CreateUserValidator } from './validator/create.user.validator';
 
 @Module({
@@ -19,6 +20,12 @@ import { CreateUserValidator } from './validator/create.user.validator';
     UsinDatabaseModule,
   ],
   controllers: [ServiceUserController],
-  providers: [ServiceUserService, ServiceUserRepository, CreateUserValidator],
+  providers: [
+    ServiceUserService,
+    ServiceUserRepository,
+
+    CommonUserValidator,
+    CreateUserValidator,
+  ],
 })
 export class ServiceUserModule {}

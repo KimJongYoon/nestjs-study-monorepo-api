@@ -2,11 +2,13 @@ import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsinDatabaseService } from '../../../../libs/database/src';
 import { CreateUserDto } from '../dto/create.user.dto';
+import { CommonUserValidator } from './common.user.validator';
 import { CreateUserValidator } from './create.user.validator';
 
 jest.setTimeout(20 * 60 * 1000);
 describe('CreateUserValidator', () => {
   let createUserValidator: CreateUserValidator;
+  let commonUserValidator: CommonUserValidator;
   let usinDatabaseService: UsinDatabaseService;
   const repositoryTemp = [
     {
@@ -23,6 +25,7 @@ describe('CreateUserValidator', () => {
       .compile();
 
     createUserValidator = app.get<CreateUserValidator>(CreateUserValidator);
+    // commonUserValidator = app.get<CommonUserValidator>(CommonUserValidator);
     usinDatabaseService = app.get<UsinDatabaseService>(UsinDatabaseService);
   });
 
@@ -76,6 +79,36 @@ describe('CreateUserValidator', () => {
 
       await expect(result).rejects.toThrowError(
         `nickName: ${dto.nickName} is already exist`,
+      );
+
+      expect(usinDatabaseService.user.findFirst).toHaveBeenCalledWith({
+        where: { uid: dto.uid, deletedAt: null },
+      });
+      expect(usinDatabaseService.user.findFirst).toHaveBeenCalledTimes(2);
+      expect(usinDatabaseService.user.findFirst()).resolves.toBe(
+        repositoryTemp[0],
+      );
+    });
+
+    it('이메일 중복 검사', async () => {
+      usinDatabaseService.user.findFirst = jest
+        .fn()
+        .mockResolvedValueOnce(undefined)
+        .mockResolvedValueOnce(undefined)
+        .mockResolvedValue(repositoryTemp[0]);
+
+      const dto = new CreateUserDto();
+      dto.uid = 'test';
+      dto.nickName = 'test';
+      dto.password = 'test';
+      dto.email = 'test';
+
+      const result = async () => {
+        await createUserValidator.validate(dto);
+      };
+
+      await expect(result).rejects.toThrowError(
+        `email: ${dto.email} is already exist`,
       );
 
       expect(usinDatabaseService.user.findFirst).toHaveBeenCalledWith({

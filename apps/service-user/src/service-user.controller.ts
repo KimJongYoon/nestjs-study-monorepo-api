@@ -18,12 +18,12 @@ export class ServiceUserController {
   @AsyncApiSub({
     summary: '사용자 상세 조회',
     description: '사용자 상세 정보를 조회합니다.',
-    channel: UserChannelEnum.FIND_ONE,
+    channel: UserChannelEnum.FIND_ONE_USIN,
     message: {
       payload: FindOneUserDto,
     },
   })
-  @MessagePattern(UserChannelEnum.FIND_ONE)
+  @MessagePattern(UserChannelEnum.FIND_ONE_USIN)
   async findOne(@Payload() dto: FindOneUserDto, @Ctx() context: NatsContext) {
     const { uid } = dto;
     const data = await this.serviceUserService.findOne(uid);

@@ -1,6 +1,6 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from '../../../libs/database/src';
+import { User } from '../../../libs/database/src/usin/generated/client';
 import { CreateUserDto } from './dto/create.user.dto';
 import { ServiceUserRepository } from './service-user.repository';
 import { ServiceUserService } from './service-user.service';

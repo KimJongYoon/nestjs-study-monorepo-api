@@ -21,4 +21,14 @@ export class UserValidatorException {
     Logger.error(message, CreateUserValidator.name);
     throw new BadRequestException(message);
   }
+
+  /**
+   * email 유효성 검사 예외
+   * @param email
+   */
+  static validateEmail(email: string) {
+    const message = `email: ${email} is already exist`;
+    Logger.error(message, CreateUserValidator.name);
+    throw new BadRequestException(message);
+  }
 }
