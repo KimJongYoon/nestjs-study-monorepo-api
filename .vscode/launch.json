@@ -15,6 +15,13 @@
       "name": "service-user", 
       "request": "launch",
       "type": "node-terminal"
-    }
+    },
+    {
+      "command": "npm run service-auth:debug",
+      "name": "service-auth", 
+      "request": "launch",
+      "type": "node-terminal"
+    },
+
   ] 
 }

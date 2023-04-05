@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
-import { CommonEntity } from '../../../../core/src';
-import { User } from '../../../../database/src';
+import { IsEmail, IsString, Matches } from 'class-validator';
+import { CommonEntity } from '../../../../../core/src';
+import { User } from '../../generated/client';
 
 export class UserModel extends CommonEntity implements User {
   @ApiProperty({
@@ -22,7 +22,10 @@ export class UserModel extends CommonEntity implements User {
     example: 'abc123456!',
     description: '비밀번호',
   })
-  @IsString()
+  @Matches(/^(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, {
+    message:
+      '비밀번호는 최소 8자리 이상 숫자, 특수문자가 각각 1개 이상 조합으로 입력하여 주십시요.',
+  })
   password: string;
 
   @ApiProperty({

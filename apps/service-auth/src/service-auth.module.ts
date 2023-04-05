@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import databaseConfig from '../../../libs/database/src/database.config';
+import { UsinDatabaseModule } from '../../../libs/database/src';
+import usinDatabaseConfig from '../../../libs/database/src/usin/usin.database.config';
+import authConfig from './config/auth.config';
 import { ServiceAuthController } from './service-auth.controller';
 import { ServiceAuthService } from './service-auth.service';
 
@@ -9,8 +11,10 @@ import { ServiceAuthService } from './service-auth.service';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: 'apps/service-auth/.env',
-      load: [databaseConfig],
+      load: [authConfig, usinDatabaseConfig],
     }),
+
+    UsinDatabaseModule,
   ],
   controllers: [ServiceAuthController],
   providers: [ServiceAuthService],

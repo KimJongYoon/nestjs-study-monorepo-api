@@ -1,9 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { REQUEST } from '@nestjs/core';
-import { ClientProxy, NatsRecordBuilder } from '@nestjs/microservices';
-import * as nats from 'nats';
+import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { UserModel } from '../../../../libs/microservice/src';
+import { UserModel } from '../../../../libs/database/src/usin/models/user/user.model';
+import { UserChannelEnum } from '../../../../libs/microservice/src/enum/user.channel.enum';
+import { NatsBuildHelper } from '../../../../libs/microservice/src/helper/nats.build.helper';
 import { CreateUserDto } from './dto/create.user.dto';
 import { UserServiceException } from './exceptions/user.service-exception';
 
@@ -20,15 +21,10 @@ export class UserService {
    */
   async create(dto: CreateUserDto): Promise<UserModel> {
     try {
-      // header
-      const headers = nats.headers();
-      const requestId = this.request?.requestId ?? '';
-      headers.set('request-id', requestId.toString());
-
-      const record = new NatsRecordBuilder(dto).setHeaders(headers).build();
+      const record = NatsBuildHelper.buildNatsRecord(dto, this.request);
 
       const data = await firstValueFrom(
-        this.client.send('user.create', record),
+        this.client.send(UserChannelEnum.CREATE, record),
       );
 
       return data;

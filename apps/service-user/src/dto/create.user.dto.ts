@@ -4,8 +4,8 @@ import {
   EntityBuilder,
   EntityValidator,
 } from '../../../../libs/core/src';
-import { Prisma } from '../../../../libs/database/src';
-import { UserModel } from '../../../../libs/microservice/src/models/user/user.model';
+import { Prisma } from '../../../../libs/database/src/usin/generated/client';
+import { UserModel } from '../../../../libs/database/src/usin/models/user/user.model';
 
 export class CreateUserDto
   extends PickType(UserModel, ['uid', 'email', 'password', 'nickName'])

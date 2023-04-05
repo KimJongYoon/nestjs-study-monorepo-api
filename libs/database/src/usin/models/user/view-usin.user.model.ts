@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ViewUsinUser } from '../../../../database/src';
+import { ViewUsinUser } from '../../generated/client';
 
 export class ViewUsinUserModel implements ViewUsinUser {
   @ApiProperty({
