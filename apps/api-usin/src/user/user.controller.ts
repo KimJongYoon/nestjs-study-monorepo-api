@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Patch, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiExtraModels,
@@ -7,6 +7,7 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { PassJwtGuard } from '../../../../libs/core/src/meta/public.meta';
 import { CreateResponse } from '../../../../libs/core/src/response/create.response';
 import { CreateUserDto } from '../../../service-user/src/dto/create.user.dto';
 import { UserService } from './user.service';
@@ -18,6 +19,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
+  @PassJwtGuard()
   @ApiOperation({ summary: '사용자 생성' })
   @ApiOkResponse({ type: CreateResponse })
   @ApiBadRequestResponse({ description: '잘못된 요청' })
@@ -26,4 +28,7 @@ export class UserController {
     const data = await this.userService.create(dto);
     return new CreateResponse(data.uid);
   }
+
+  @Patch(':uid')
+  async edit(@Body() dto: )
 }

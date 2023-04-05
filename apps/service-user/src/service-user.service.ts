@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../../../libs/database/src';
+import {
+  User,
+  ViewUsinUser,
+} from '../../../libs/database/src/usin/generated/client';
 import { CreateUserDto } from './dto/create.user.dto';
-import { UserServiceException } from './exceptions/user.service-exception';
+import { UserServiceException } from './exception/user.service-exception';
 import { ServiceUserRepository } from './service-user.repository';
-import { CreateUserValidator } from './validators/create.user.validator';
+import { CreateUserValidator } from './validator/create.user.validator';
 
 @Injectable()
 export class ServiceUserService {
@@ -11,6 +14,20 @@ export class ServiceUserService {
     private readonly serviceUserRepository: ServiceUserRepository,
     private readonly createUserValidator: CreateUserValidator,
   ) {}
+
+  /**
+   * 사용자 정보 상세 조회
+   * @param uid
+   * @returns
+   */
+  async findOne(uid: string): Promise<Partial<ViewUsinUser>> {
+    try {
+      const data = await this.serviceUserRepository.findOneByUid(uid);
+      return data;
+    } catch (error) {
+      UserServiceException.findOne(error);
+    }
+  }
 
   /**
    * 사용자 등록

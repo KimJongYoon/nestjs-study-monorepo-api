@@ -6,7 +6,7 @@ import userConfig from './config/user.config';
 import { ServiceUserController } from './service-user.controller';
 import { ServiceUserRepository } from './service-user.repository';
 import { ServiceUserService } from './service-user.service';
-import { CreateUserValidator } from './validators/create.user.validator';
+import { CreateUserValidator } from './validator/create.user.validator';
 
 @Module({
   imports: [

@@ -4,7 +4,7 @@ import { User } from '../../../libs/database/src';
 import { CreateUserDto } from './dto/create.user.dto';
 import { ServiceUserRepository } from './service-user.repository';
 import { ServiceUserService } from './service-user.service';
-import { CreateUserValidator } from './validators/create.user.validator';
+import { CreateUserValidator } from './validator/create.user.validator';
 
 jest.setTimeout(20 * 60 * 1000);
 describe('ServiceUserService', () => {

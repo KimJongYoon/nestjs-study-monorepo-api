@@ -5,6 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
+import { NatsHeaderEnum } from '../enum/nats.header.enum';
 
 export class NatsLoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -38,9 +39,9 @@ export class NatsLoggingInterceptor implements NestInterceptor {
 
     const channel = ctx.getSubject();
     const headers = ctx.getHeaders()?.headers;
-    const requestId = headers.get('request-id')?.[0];
-    const fromApi = headers.get('api-from')?.[0];
-    const version = headers.get('api-version')?.[0];
+    const requestId = headers.get(NatsHeaderEnum.REQUEST_ID)?.[0];
+    const fromApi = headers.get(NatsHeaderEnum.FROM_SERVER)?.[0];
+    const version = headers.get(NatsHeaderEnum.VERSION_SERVER)?.[0];
     const headerToArray = Array.from(headers);
 
     Logger.log(`================ START REQUEST [REQUEST ID: ${requestId}] ================
@@ -62,7 +63,7 @@ export class NatsLoggingInterceptor implements NestInterceptor {
 
     const channel = ctx.getSubject();
     const headers = ctx.getHeaders()?.headers;
-    const requestId = headers.get('request-id')?.[0];
+    const requestId = headers.get(NatsHeaderEnum.REQUEST_ID)?.[0];
     return next.handle().pipe(
       tap((value) =>
         Logger.log(

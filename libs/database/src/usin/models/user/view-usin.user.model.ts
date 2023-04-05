@@ -23,12 +23,12 @@ export class ViewUsinUserModel implements ViewUsinUser {
     example: '미온',
     description: '닉네임',
   })
-  nick_name: string;
+  nickName: string;
 
   @ApiProperty({
     description: '등록일시',
   })
-  created_at: Date;
+  createdAt: Date;
 
   @ApiProperty({
     example: '비고',

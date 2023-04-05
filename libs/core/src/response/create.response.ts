@@ -19,8 +19,8 @@ export class CreateResponse {
   })
   dataId: string;
   constructor(dataId: string) {
-    this.dataId = dataId;
-    this.message = '정상적으로 등록되었습니다.';
     this.statusCode = 200;
+    this.message = '정상적으로 등록되었습니다.';
+    this.dataId = dataId;
   }
 }

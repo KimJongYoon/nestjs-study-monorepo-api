@@ -4,24 +4,48 @@
   // 자세한 내용을 보려면 https://go.microsoft.com/fwlink/?linkid=830387을(를) 방문하세요.
   "version": "0.2.0",
   "configurations":[
-    {
-      "command": "npm run api-usin:debug",
-      "name": "api-usin", 
-      "request": "launch",
-      "type": "node-terminal"
-    },
-    {
-      "command": "npm run service-user:debug",
-      "name": "service-user", 
-      "request": "launch",
-      "type": "node-terminal"
-    },
-    {
-      "command": "npm run service-auth:debug",
-      "name": "service-auth", 
-      "request": "launch",
-      "type": "node-terminal"
-    },
-
+  {
+    "name": "api-usin",
+    "request": "launch",
+    "runtimeArgs": [
+      "run-script",
+      "api-usin:debug"
+    ],
+    "runtimeExecutable": "npm",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node",
+    "console": "integratedTerminal",
+  },
+  {
+    "name": "service-auth",
+    "request": "launch",
+    "runtimeArgs": [
+      "run-script",
+      "service-auth:debug"
+    ],
+    "runtimeExecutable": "npm",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node",
+    "console": "integratedTerminal",
+  }, 
+  {
+    "name": "service-user",
+    "request": "launch",
+    "runtimeArgs": [
+      "run-script",
+      "service-user:debug"
+    ],
+    "runtimeExecutable": "npm",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node",
+    "console": "integratedTerminal",
+  },
+  
   ] 
 }

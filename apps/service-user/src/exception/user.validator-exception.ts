@@ -1,6 +1,5 @@
 import { BadRequestException, Logger } from '@nestjs/common';
-import { RpcException } from '@nestjs/microservices';
-import { CreateUserValidator } from '../validators/create.user.validator';
+import { CreateUserValidator } from '../validator/create.user.validator';
 
 export class UserValidatorException {
   /**

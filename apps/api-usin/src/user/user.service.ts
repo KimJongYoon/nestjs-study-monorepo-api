@@ -6,12 +6,12 @@ import { UserModel } from '../../../../libs/database/src/usin/models/user/user.m
 import { UserChannelEnum } from '../../../../libs/microservice/src/enum/user.channel.enum';
 import { NatsBuildHelper } from '../../../../libs/microservice/src/helper/nats.build.helper';
 import { CreateUserDto } from './dto/create.user.dto';
-import { UserServiceException } from './exceptions/user.service-exception';
+import { UserServiceException } from './exception/user.service-exception';
 
 @Injectable()
 export class UserService {
   constructor(
-    @Inject('NATS_CLIENT') private readonly client: ClientProxy,
+    @Inject('NATS_USER_CLIENT') private readonly client: ClientProxy,
     @Inject(REQUEST) private request,
   ) {}
 
@@ -21,7 +21,10 @@ export class UserService {
    */
   async create(dto: CreateUserDto): Promise<UserModel> {
     try {
-      const record = NatsBuildHelper.buildNatsRecord(dto, this.request);
+      const record = NatsBuildHelper.buildNatsRecord({
+        payload: dto,
+        request: this.request,
+      });
 
       const data = await firstValueFrom(
         this.client.send(UserChannelEnum.CREATE, record),

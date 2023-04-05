@@ -1,11 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { REQUEST } from '@nestjs/core';
+import { Inject, Injectable, Req } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { firstValueFrom } from 'rxjs';
-import { AuthChannelEnum } from '../../../../../libs/microservice/src/enum/auth.channel.enum';
-import { NatsBuildHelper } from '../../../../../libs/microservice/src/helper/nats.build.helper';
+import { RequestHelper } from '../../../../../libs/core/src';
+import {
+  AuthChannelEnum,
+  NatsBuildHelper,
+} from '../../../../../libs/microservice/src';
+import { AuthStrategyException } from '../exceptions/auth.strategy.exception';
 
 @Injectable()
 export class UsinLoginStrategy extends PassportStrategy(
@@ -13,21 +16,31 @@ export class UsinLoginStrategy extends PassportStrategy(
   'usin-login',
 ) {
   constructor(
-    @Inject('NATS_CLIENT') private readonly client: ClientProxy,
-    @Inject(REQUEST) private request,
+    @Inject('NATS_USER_CLIENT') private readonly client: ClientProxy,
   ) {
-    super({ usernameField: 'uid', passwordField: 'password' });
+    super({
+      usernameField: 'uid',
+      passwordField: 'password',
+      passReqToCallback: true,
+    });
   }
 
-  async validate(uid: string, password: string): Promise<any> {
-    const record = NatsBuildHelper.buildNatsRecord(
-      { uid, password },
-      this.request,
-    );
+  async validate(@Req() req, uid: string, password: string): Promise<any> {
+    try {
+      req.requestId = RequestHelper.createRequestId();
+      req.requestTime = RequestHelper.createRequestTime();
 
-    const user = await firstValueFrom(
-      this.client.send(AuthChannelEnum.VALIDATE_USIN, record),
-    );
-    return user;
+      const record = NatsBuildHelper.buildNatsRecord({
+        payload: { uid, password },
+        request: req,
+      });
+
+      const user = await firstValueFrom(
+        this.client.send(AuthChannelEnum.USIN_VALIDATE, record),
+      );
+      return user;
+    } catch (error) {
+      AuthStrategyException.validate(error);
+    }
   }
 }

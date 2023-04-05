@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { throwError } from 'rxjs';
+import { NatsHeaderEnum } from '../enum/nats.header.enum';
 
 /**
  * 마이크로서비스에서 발생한 HttpException을 RpcException으로 변발
@@ -25,7 +26,7 @@ export class RpcToHttpExceptionFilter implements ExceptionFilter {
   private printExceptionLog(host: ArgumentsHost, error: HttpException) {
     const ctx = host.getArgs()[1];
     const headers = ctx.getHeaders()?.headers;
-    const requestId = headers.get('request-id')?.[0];
+    const requestId = headers.get(NatsHeaderEnum.REQUEST_ID)?.[0];
     Logger.error(
       `================ EXCEPTION REQUEST [REQUEST ID: ${requestId}] ${
         Date.now() - ctx.requestTime
