@@ -29,14 +29,21 @@ async function bootstrap() {
     .setTitle('API Usin')
     .setDescription('Usin API')
     .setVersion('1.0')
+    // .addBearerAuth(
+    //   {
+    //     description: `Bearer 포멧의 토큰을 입력<JWT>`,
+    //     name: 'Authorization',
+    //     bearerFormat: 'Bearer',
+    //     scheme: 'Bearer',
+    //     type: 'http',
+    //     in: 'Header',
+    //   },
     .addBearerAuth(
       {
-        description: `Bearer 포멧의 토큰을 입력<JWT>`,
-        name: 'Authorization',
-        bearerFormat: 'Bearer',
-        scheme: 'Bearer',
         type: 'http',
-        in: 'Header',
+        scheme: 'bearer',
+        name: 'JWT',
+        in: 'header',
       },
       'accessToken',
     )

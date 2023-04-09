@@ -7,7 +7,7 @@ import {
   NatsBuildHelper,
 } from '../../../../libs/microservice/src';
 import { LoginAuthDto } from './dto/login.auth.dto';
-import { AuthServiceException } from './exceptions/auth.service.exception';
+import { AuthServiceException } from './exception/auth.service.exception';
 
 @Injectable()
 export class AuthService {

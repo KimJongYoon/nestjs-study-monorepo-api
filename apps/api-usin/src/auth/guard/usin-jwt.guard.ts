@@ -14,6 +14,7 @@ import {
   AuthChannelEnum,
   NatsBuildHelper,
 } from '../../../../../libs/microservice/src';
+import { AuthJwtGuardException } from '../exception/auth.jwt-guard.exception';
 
 @Injectable()
 export class UsinJwtGuard implements CanActivate {
@@ -38,15 +39,7 @@ export class UsinJwtGuard implements CanActivate {
     // 토큰정보 조회
     const accessToken = this.getAccessToken(req);
 
-    const record = NatsBuildHelper.buildNatsRecord({
-      payload: { accessToken },
-      request: req,
-    });
-
-    // 토큰 정보 확인
-    await firstValueFrom(
-      this.client.send(AuthChannelEnum.USIN_VALIDATE_TOKEN, record),
-    );
+    await this.validateToken(accessToken, req);
 
     return true;
   }
@@ -66,5 +59,26 @@ export class UsinJwtGuard implements CanActivate {
    */
   private getAccessToken(req: any): string {
     return req.headers?.authorization?.split('Bearer ')?.[1];
+  }
+
+  /**
+   * 토큰 정보 유효성 검사
+   * @param accessToken
+   * @param req
+   */
+  private async validateToken(accessToken: string, req: any) {
+    try {
+      const record = NatsBuildHelper.buildNatsRecord({
+        payload: { accessToken },
+        request: req,
+      });
+
+      // 토큰 정보 확인
+      await firstValueFrom(
+        this.client.send(AuthChannelEnum.USIN_VALIDATE_TOKEN, record),
+      );
+    } catch (error) {
+      AuthJwtGuardException.validate(error);
+    }
   }
 }

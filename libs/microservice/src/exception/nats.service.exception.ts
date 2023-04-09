@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
@@ -12,11 +14,13 @@ export class NatsServiceException {
     error: any;
     serviceName: string;
     internalErrorMessage: string;
+    httpStatus?: HttpStatus;
   }) {
-    const { error, serviceName, internalErrorMessage } = params;
-
-    if (error instanceof BadRequestException) throw error;
+    const { error, serviceName, internalErrorMessage, httpStatus } = params;
     Logger.error(error, error?.stack, serviceName);
+
+    if (httpStatus) throw new HttpException(internalErrorMessage, httpStatus);
+    if (error instanceof BadRequestException) throw error;
     throw new InternalServerErrorException(internalErrorMessage);
   }
 }

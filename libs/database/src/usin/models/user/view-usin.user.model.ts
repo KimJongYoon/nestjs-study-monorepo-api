@@ -14,12 +14,6 @@ export class ViewUsinUserModel implements ViewUsinUser {
   email: string;
 
   @ApiProperty({
-    example: 'abc123456!',
-    description: '비밀번호',
-  })
-  password: string;
-
-  @ApiProperty({
     example: '미온',
     description: '닉네임',
   })
@@ -29,10 +23,4 @@ export class ViewUsinUserModel implements ViewUsinUser {
     description: '등록일시',
   })
   createdAt: Date;
-
-  @ApiProperty({
-    example: '비고',
-    description: '비고',
-  })
-  remark: string;
 }

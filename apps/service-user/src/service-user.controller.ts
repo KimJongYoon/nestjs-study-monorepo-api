@@ -8,6 +8,7 @@ import {
 import { AsyncApiSub } from 'nestjs-asyncapi';
 import { UserChannelEnum } from '../../../libs/microservice/src/enum/user.channel.enum';
 import { CreateUserDto } from './dto/create.user.dto';
+import { EditUserDto } from './dto/edit.user.dto';
 import { FindOneUserDto } from './dto/find-one.user.dto';
 import { ServiceUserService } from './service-user.service';
 
@@ -41,6 +42,20 @@ export class ServiceUserController {
   @MessagePattern(UserChannelEnum.CREATE)
   async create(@Payload() dto: CreateUserDto, @Ctx() context: NatsContext) {
     const data = await this.serviceUserService.create(dto);
+    return data;
+  }
+
+  @AsyncApiSub({
+    summary: '사용자 수정',
+    description: '사용자 정보를 수정합니다.',
+    channel: UserChannelEnum.CREATE,
+    message: {
+      payload: EditUserDto,
+    },
+  })
+  @MessagePattern(UserChannelEnum.EDIT)
+  async dit(@Payload() dto: EditUserDto, @Ctx() context: NatsContext) {
+    const data = await this.serviceUserService.edit(dto);
     return data;
   }
 }

@@ -8,7 +8,7 @@ import {
   AuthChannelEnum,
   NatsBuildHelper,
 } from '../../../../../libs/microservice/src';
-import { AuthStrategyException } from '../exceptions/auth.strategy.exception';
+import { AuthStrategyException } from '../exception/auth.strategy.exception';
 
 @Injectable()
 export class UsinLoginStrategy extends PassportStrategy(

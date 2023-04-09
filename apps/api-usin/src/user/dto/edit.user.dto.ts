@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
+import { PartialType, PickType } from '@nestjs/swagger';
 import { UserModel } from '../../../../../libs/database/src';
 
-export class EditUserDto extends PartialType(UserModel) {}
+export class EditUserDto extends PickType(PartialType(UserModel), [
+  'nickName',
+  'password',
+  'email',
+]) {}

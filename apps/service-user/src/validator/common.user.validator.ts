@@ -1,19 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { UsinDatabaseService } from '../../../../libs/database/src';
 import { UserValidatorException } from '../exception/user.validator-exception';
+import { ServiceUserRepository } from '../repository/service-user.repository';
 
 @Injectable()
 export class CommonUserValidator {
-  constructor(private readonly usinDatabaseService: UsinDatabaseService) {}
+  constructor(private readonly serviceUserRepository: ServiceUserRepository) {}
 
   /**
    * uid 중복 검사
    * @param dto
    */
   async validateUid(uid: string) {
-    const savedUserByUid = await this.usinDatabaseService.user.findFirst({
-      where: { uid: uid, deletedAt: null },
-    });
+    if(!uid) return;
+    const savedUserByUid = await this.serviceUserRepository.findOneByUid(uid);
 
     if (savedUserByUid) {
       UserValidatorException.validateUid(uid);
@@ -24,12 +23,13 @@ export class CommonUserValidator {
    * 닉네임 중복 검사
    * @param dto
    */
-  async validateNickName(nickName: string) {
-    const savedUserByNickName = await this.usinDatabaseService.user.findFirst({
-      where: { nickName: nickName, deletedAt: null },
-    });
+  async validateNickName(nickName: string, editRequestUid?: string) {
+    if(!nickName) return;
+    const savedUserByNickName =
+      await this.serviceUserRepository.findOneByNickName(nickName);
 
-    if (savedUserByNickName) {
+    const isNotRequestUser = savedUserByNickName?.uid !== editRequestUid;
+    if (savedUserByNickName && isNotRequestUser) {
       UserValidatorException.validateNickName(nickName);
     }
   }
@@ -38,12 +38,14 @@ export class CommonUserValidator {
    * 이메일 중복 검사
    * @param dto
    */
-  async validateEmail(email: string) {
-    const savedUserByEmail = await this.usinDatabaseService.user.findFirst({
-      where: { email: email, deletedAt: null },
-    });
+  async validateEmail(email: string, editRequestUid?: string) {
+    if(!email) return;
+    const savedUserByEmail = await this.serviceUserRepository.findOneByEmail(
+      email,
+    );
 
-    if (savedUserByEmail) {
+    const isNotRequestUser = savedUserByEmail?.uid !== editRequestUid;
+    if (savedUserByEmail && isNotRequestUser) {
       UserValidatorException.validateEmail(email);
     }
   }

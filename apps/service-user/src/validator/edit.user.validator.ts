@@ -1,16 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { EntityValidator } from '../../../../libs/core/src';
-import { CreateUserDto } from '../dto/create.user.dto';
+import { EditUserDto } from '../dto/edit.user.dto';
 import { CommonUserValidator } from './common.user.validator';
 
 @Injectable()
-export class CreateUserValidator implements EntityValidator<CreateUserDto> {
+export class EditUserValidator implements EntityValidator<EditUserDto> {
   constructor(private readonly commonUserValidator: CommonUserValidator) {}
 
-  async validate(dto: CreateUserDto, optional?: object): Promise<void> {
-    // uid 중복 검사
-    await this.commonUserValidator.validateUid(dto.uid);
-
+  async validate(dto: EditUserDto): Promise<void> {
     // nickName 중복 검사
     await this.commonUserValidator.validateNickName(dto.nickName);
 

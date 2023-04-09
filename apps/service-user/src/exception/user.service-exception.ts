@@ -16,4 +16,12 @@ export class UserServiceException {
       internalErrorMessage: `사용자 등록 작업 중 오류가 발생 하였습니다.`,
     });
   }
+
+  static edit(error: any) {
+    NatsServiceException.exception({
+      error,
+      serviceName: ServiceUserService.name,
+      internalErrorMessage: `사용자 수정 작업 중 오류가 발생 하였습니다.`,
+    });
+  }
 }

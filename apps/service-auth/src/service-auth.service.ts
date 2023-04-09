@@ -13,6 +13,7 @@ import {
 } from '../../../libs/microservice/src';
 import { SignInUsinDto } from './dto/signin.usin.dto';
 import { ValidateUsinDto } from './dto/validate.usin.dto';
+import { AuthServiceException } from './exception/auth.service-exception';
 
 @Injectable()
 export class ServiceAuthService {
@@ -100,11 +101,15 @@ export class ServiceAuthService {
    * 어신 사용자 토큰 검증
    */
   async validateAccessTokenUsin(accessToken: string, context: NatsContext) {
-    const config = this.configService.get(NatsConfigNameEnum.SERVICE_AUTH);
-    const payload = await this.jwtService.signAsync(accessToken, {
-      secret: config.jwt.accessTokenSecret,
-    });
+    try {
+      const config = this.configService.get(NatsConfigNameEnum.SERVICE_AUTH);
+      const payload = await this.jwtService.signAsync(accessToken, {
+        secret: config.jwt.accessTokenSecret,
+      });
 
-    return payload;
+      return payload;
+    } catch (error) {
+      AuthServiceException.validateAccessTokenUsin(error);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test } from '@nestjs/testing';
-import { UsinDatabaseService } from '../../../libs/database/src';
+import { UsinDatabaseService } from '../../../../libs/database/src';
 import { ServiceUserRepository } from './service-user.repository';
 
 describe('ServiceUserRepository', () => {

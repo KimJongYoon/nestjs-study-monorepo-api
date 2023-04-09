@@ -2,13 +2,13 @@ import { createMock } from '@golevelup/ts-jest';
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsinDatabaseService } from '../../../../libs/database/src';
-import { CreateUserDto } from '../dto/create.user.dto';
+import { EditUserDto } from '../dto/edit.user.dto';
 import { CommonUserValidator } from './common.user.validator';
-import { CreateUserValidator } from './create.user.validator';
+import { EditUserValidator } from './edit.user.validator';
 
 jest.setTimeout(20 * 60 * 1000);
-describe('CreateUserValidator', () => {
-  let createUserValidator: CreateUserValidator;
+describe('EditUserValidator', () => {
+  let editUserValidator: EditUserValidator;
   let commonUserValidator: CommonUserValidator;
   let usinDatabaseService: UsinDatabaseService;
   const repositoryTemp = [
@@ -20,12 +20,12 @@ describe('CreateUserValidator', () => {
 
   beforeAll(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      providers: [CreateUserValidator],
+      providers: [EditUserValidator],
     })
       .useMocker(createMock)
       .compile();
 
-    createUserValidator = app.get<CreateUserValidator>(CreateUserValidator);
+    editUserValidator = app.get<EditUserValidator>(EditUserValidator);
   });
 
   afterEach(async () => {
@@ -33,37 +33,16 @@ describe('CreateUserValidator', () => {
     jest.restoreAllMocks();
   });
 
-  describe('사용자 등록', () => {
-    it('uid 중복 검사', async () => {
-      const dto = new CreateUserDto();
-      dto.uid = 'test';
-      dto.nickName = 'test';
-      dto.password = 'test';
-
-      jest
-        .spyOn((createUserValidator as any).commonUserValidator, 'validateUid')
-        .mockRejectedValueOnce(
-          new BadRequestException(`uid: ${dto.uid} is already exist`),
-        );
-
-      const result = async () => {
-        await createUserValidator.validate(dto);
-      };
-
-      await expect(result).rejects.toThrowError(
-        `uid: ${dto.uid} is already exist`,
-      );
-    });
-
+  describe('사용자 수정', () => {
     it('닉네임 중복 검사', async () => {
-      const dto = new CreateUserDto();
+      const dto = new EditUserDto();
       dto.uid = 'test';
       dto.nickName = 'test';
       dto.password = 'test';
 
       jest
         .spyOn(
-          (createUserValidator as any).commonUserValidator,
+          (editUserValidator as any).commonUserValidator,
           'validateNickName',
         )
         .mockRejectedValueOnce(
@@ -71,7 +50,7 @@ describe('CreateUserValidator', () => {
         );
 
       const result = async () => {
-        await createUserValidator.validate(dto);
+        await editUserValidator.validate(dto);
       };
 
       await expect(result).rejects.toThrowError(
@@ -80,22 +59,19 @@ describe('CreateUserValidator', () => {
     });
 
     it('이메일 중복 검사', async () => {
-      const dto = new CreateUserDto();
+      const dto = new EditUserDto();
       dto.uid = 'test';
       dto.nickName = 'test';
       dto.password = 'test';
       dto.email = 'test';
       jest
-        .spyOn(
-          (createUserValidator as any).commonUserValidator,
-          'validateEmail',
-        )
+        .spyOn((editUserValidator as any).commonUserValidator, 'validateEmail')
         .mockRejectedValueOnce(
           new BadRequestException(`email: ${dto.email} is already exist`),
         );
 
       const result = async () => {
-        await createUserValidator.validate(dto);
+        await editUserValidator.validate(dto);
       };
 
       await expect(result).rejects.toThrowError(

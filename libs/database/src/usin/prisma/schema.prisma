@@ -64,8 +64,6 @@ view ViewUsinUser {
   uid       String   @unique
   createdAt DateTime @map("created_at")
   email     String
-  password  String?
-  remark    String?
   nickName  String   @map("nick_name")
 
   @@map("USIN_VIEW_USER")
