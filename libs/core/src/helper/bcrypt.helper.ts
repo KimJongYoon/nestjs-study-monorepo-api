@@ -16,6 +16,6 @@ export class BcryptHelper {
    * @returns
    */
   static async compare(password: string, hash: string): Promise<boolean> {
-    return bcrypt.compare(password, hash);
+    return await bcrypt.compare(password, hash);
   }
 }

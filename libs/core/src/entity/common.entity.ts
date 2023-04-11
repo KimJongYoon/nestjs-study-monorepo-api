@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { BooleanTypes } from '../../../database/src';
+import { BooleanTypes } from '../../../database/src/usin/generated/client';
 
 export abstract class CommonEntity {
   @ApiProperty({

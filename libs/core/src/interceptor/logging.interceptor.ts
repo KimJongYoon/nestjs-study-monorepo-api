@@ -5,6 +5,7 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
+import { RequestHelper } from '../helper/request.helper';
 
 export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
@@ -30,7 +31,7 @@ export class LoggingInterceptor implements NestInterceptor {
    * @param context
    */
   static printRequestLog(context: ExecutionContext) {
-    const requestId = Math.round(Math.random() * 100000000);
+    const requestId = RequestHelper.createRequestId();
     const incomingMessage = context.getArgs()[0];
     const remoteIP = incomingMessage.connection.remoteAddress;
     const jwt =
@@ -40,7 +41,7 @@ export class LoggingInterceptor implements NestInterceptor {
         .headers?.authorization?.split('Bearer ')[1] ?? '';
 
     incomingMessage.requestId = requestId;
-    incomingMessage.requestTime = Date.now();
+    incomingMessage.requestTime = RequestHelper.createRequestTime();
 
     Logger.log(`================ START REQUEST [REQUEST ID: ${requestId}] ================
     REMOTE IP: [ ${remoteIP} ]

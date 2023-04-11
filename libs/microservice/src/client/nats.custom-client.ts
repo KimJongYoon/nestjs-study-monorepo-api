@@ -1,5 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { ClientNats, ReadPacket, WritePacket } from '@nestjs/microservices';
+import { RequestHelper } from '../../../core/src';
+import { NatsHeaderEnum } from '../enum/nats.header.enum';
 
 export class NatsCustomClient extends ClientNats {
   /**
@@ -13,6 +15,7 @@ export class NatsCustomClient extends ClientNats {
     callback: (packet: WritePacket) => any,
   ): () => void {
     const options = this.options;
+    const requestTime = RequestHelper.createRequestTime();
 
     // 패킷 전송 로그 출력
     this.printSendLog(partialPacket, { options });
@@ -21,6 +24,7 @@ export class NatsCustomClient extends ClientNats {
     const fnCallback = this.printReceiveLog(callback, {
       options,
       partialPacket,
+      requestTime,
     });
 
     const response = super.publish(partialPacket, fnCallback);
@@ -51,10 +55,11 @@ export class NatsCustomClient extends ClientNats {
     const { options } = params;
 
     const packetHeaders = partialPacket.data.headers;
-    const requestId = packetHeaders.get('request-id');
+    const requestId = packetHeaders.get(NatsHeaderEnum.REQUEST_ID);
 
+    // Nats Client 생성 시 옵션으로 전달한 헤더
     const optionsHeaders = options.headers;
-    const version = optionsHeaders['api-version'];
+    const version = optionsHeaders[NatsHeaderEnum.VERSION_SERVER];
 
     Logger.log(
       `================ NatsClient SEND [REQUEST ID: ${requestId}] ================ 
@@ -75,18 +80,19 @@ export class NatsCustomClient extends ClientNats {
     params: {
       partialPacket: any;
       options: any;
+      requestTime: number;
     },
   ) {
-    const { partialPacket, options } = params;
+    const { partialPacket, options, requestTime } = params;
 
     const packetHeaders = partialPacket.data.headers;
-    const requestId = packetHeaders.get('request-id');
-
-    const optionsHeaders = options.headers;
+    const requestId = packetHeaders.get(NatsHeaderEnum.REQUEST_ID);
 
     return (packet: WritePacket) => {
       Logger.log(
-        `================ NatsClient RECEIVE [REQUEST ID: ${requestId}] ================
+        `================ NatsClient RECEIVE [REQUEST ID: ${requestId}] ${
+          Date.now() - requestTime
+        }ms ================
         RECEIVE_PACKET : [ ${JSON.stringify(packet)} ]`,
       );
       return callback(packet);

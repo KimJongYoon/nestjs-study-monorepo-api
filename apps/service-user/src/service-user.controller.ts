@@ -1,40 +1,61 @@
-import { Controller, Logger } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import {
   Ctx,
   MessagePattern,
   NatsContext,
   Payload,
 } from '@nestjs/microservices';
-import { AsyncApiPub } from 'nestjs-asyncapi';
+import { AsyncApiSub } from 'nestjs-asyncapi';
+import { UserChannelEnum } from '../../../libs/microservice/src/enum/user.channel.enum';
 import { CreateUserDto } from './dto/create.user.dto';
+import { EditUserDto } from './dto/edit.user.dto';
+import { FindOneUserDto } from './dto/find-one.user.dto';
 import { ServiceUserService } from './service-user.service';
 
 @Controller()
 export class ServiceUserController {
   constructor(private readonly serviceUserService: ServiceUserService) {}
 
-  @AsyncApiPub({
-    channel: 'user.create',
+  @AsyncApiSub({
+    summary: '사용자 상세 조회',
+    description: '사용자 상세 정보를 조회합니다.',
+    channel: UserChannelEnum.FIND_ONE_USIN,
+    message: {
+      payload: FindOneUserDto,
+    },
+  })
+  @MessagePattern(UserChannelEnum.FIND_ONE_USIN)
+  async findOne(@Payload() dto: FindOneUserDto, @Ctx() context: NatsContext) {
+    const { uid } = dto;
+    const data = await this.serviceUserService.findOne(uid);
+    return data;
+  }
+
+  @AsyncApiSub({
+    summary: '사용자 등록',
+    description: '사용자를 등록합니다.',
+    channel: UserChannelEnum.CREATE,
     message: {
       payload: CreateUserDto,
     },
   })
-  @MessagePattern('user.create')
+  @MessagePattern(UserChannelEnum.CREATE)
   async create(@Payload() dto: CreateUserDto, @Ctx() context: NatsContext) {
-    Logger.log(
-      `user.create context: ${JSON.stringify(
-        context.getSubject(),
-      )}, dto: ${JSON.stringify(dto)}, headers: ${JSON.stringify(
-        context.getHeaders()?.headers,
-      )}`,
-    );
-
-    const headers = context.getHeaders().headers;
-    const version = headers.get('x-version')?.[0];
-    const author = headers.get('author')?.[0];
-    const requestId = headers.get('requestId')?.[0];
-
     const data = await this.serviceUserService.create(dto);
+    return data;
+  }
+
+  @AsyncApiSub({
+    summary: '사용자 수정',
+    description: '사용자 정보를 수정합니다.',
+    channel: UserChannelEnum.CREATE,
+    message: {
+      payload: EditUserDto,
+    },
+  })
+  @MessagePattern(UserChannelEnum.EDIT)
+  async edit(@Payload() dto: EditUserDto, @Ctx() context: NatsContext) {
+    const data = await this.serviceUserService.edit(dto);
     return data;
   }
 }
