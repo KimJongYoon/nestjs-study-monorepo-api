@@ -39,17 +39,11 @@ export class UsinJwtGuard implements CanActivate {
     // 토큰정보 조회
     const accessToken = this.getAccessToken(req);
 
-    await this.validateToken(accessToken, req);
+    const payload = await this.validateToken(accessToken, req);
+
+    this.appendPayload(req, payload);
 
     return true;
-  }
-
-  handleRequest(err, user, info) {
-    // You can throw an exception based on either "info" or "err" arguments
-    if (err || !user) {
-      throw err || new UnauthorizedException();
-    }
-    return user;
   }
 
   /**
@@ -74,11 +68,30 @@ export class UsinJwtGuard implements CanActivate {
       });
 
       // 토큰 정보 확인
-      await firstValueFrom(
+      const payload = await firstValueFrom(
         this.client.send(AuthChannelEnum.USIN_VALIDATE_TOKEN, record),
       );
+
+      return payload;
     } catch (error) {
       AuthJwtGuardException.validate(error);
     }
+  }
+
+  /**
+   * Request에 토큰 정보 추가
+   * @param req
+   * @param payload
+   */
+  private appendPayload(req: any, payload: any) {
+    req.user = payload;
+  }
+
+  handleRequest(err, user, info) {
+    // You can throw an exception based on either "info" or "err" arguments
+    if (err || !user) {
+      throw err || new UnauthorizedException();
+    }
+    return user;
   }
 }

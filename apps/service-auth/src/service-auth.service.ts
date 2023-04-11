@@ -103,7 +103,7 @@ export class ServiceAuthService {
   async validateAccessTokenUsin(accessToken: string, context: NatsContext) {
     try {
       const config = this.configService.get(NatsConfigNameEnum.SERVICE_AUTH);
-      const payload = await this.jwtService.signAsync(accessToken, {
+      const payload = await this.jwtService.verifyAsync(accessToken, {
         secret: config.jwt.accessTokenSecret,
       });
 

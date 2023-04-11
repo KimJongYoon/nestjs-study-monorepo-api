@@ -54,7 +54,7 @@ export class ServiceUserController {
     },
   })
   @MessagePattern(UserChannelEnum.EDIT)
-  async dit(@Payload() dto: EditUserDto, @Ctx() context: NatsContext) {
+  async edit(@Payload() dto: EditUserDto, @Ctx() context: NatsContext) {
     const data = await this.serviceUserService.edit(dto);
     return data;
   }

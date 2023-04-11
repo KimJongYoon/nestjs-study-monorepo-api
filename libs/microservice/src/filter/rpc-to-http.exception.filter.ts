@@ -17,6 +17,7 @@ export class RpcToHttpExceptionFilter implements ExceptionFilter {
     return throwError(() => {
       const error: HttpException = exception;
       error['customStack'] = exception.stack.toString();
+      error.message = this.getMessage(exception);
 
       this.printExceptionLog(host, error);
       return error;
@@ -35,5 +36,25 @@ export class RpcToHttpExceptionFilter implements ExceptionFilter {
 `,
       RpcToHttpExceptionFilter.name,
     );
+  }
+
+  /**
+   * 예외 메시지 가져오기
+   * @param exception
+   * @returns
+   */
+  private getMessage(exception: any) {
+    let message = '';
+
+    const isClassValidatorException = Array.isArray(
+      exception?.response?.message,
+    );
+    if (isClassValidatorException) {
+      message = exception.response.message[0];
+      Logger.error(message, exception.stack);
+    } else {
+      message = exception.message;
+    }
+    return message;
   }
 }

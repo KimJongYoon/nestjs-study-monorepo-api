@@ -9,10 +9,12 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { FindOneResponse } from '../../../../libs/core/src';
+import { UsinUser } from '../../../../libs/core/src/decorator/usin-user.decorator';
 import { PassJwtGuard } from '../../../../libs/core/src/meta/public.meta';
 import { CreateResponse } from '../../../../libs/core/src/response/create.response';
 import { EditResponse } from '../../../../libs/core/src/response/edit.response';
 import { ApiFindOneResponse } from '../../../../libs/core/src/swagger/find-one.decorator';
+import { User } from '../../../../libs/database/src/usin/generated/client';
 import { CreateUserDto } from '../../../service-user/src/dto/create.user.dto';
 import { EditUserDto } from './dto/edit.user.dto';
 import { FindOneUserResponse } from './response/find-one.user.response';
@@ -26,7 +28,7 @@ import { UserService } from './user.service';
 
   FindOneUserResponse,
 )
-@ApiBearerAuth('accessToken')
+@ApiBearerAuth('access-token')
 @ApiInternalServerErrorResponse({ description: '서버 에러' })
 @Controller('user')
 export class UserController {
@@ -50,11 +52,12 @@ export class UserController {
     return new CreateResponse(data.uid);
   }
 
-  @Put(':uid')
+  @Put()
   @ApiOperation({ summary: '사용자 정보 수정' })
   @ApiOkResponse({ type: EditResponse })
   @ApiBadRequestResponse({ description: '잘못된 요청' })
-  async edit(@Param('uid') uid: string, @Body() dto: EditUserDto) {
+  async edit(@Body() dto: EditUserDto, @UsinUser() user: User) {
+    const uid = user.uid;
     const data = await this.userService.edit(dto, { uid });
     return new EditResponse(data.uid);
   }

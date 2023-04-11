@@ -7,7 +7,7 @@ export class AuthServiceException {
     NatsServiceException.exception({
       error,
       serviceName: ServiceAuthService.name,
-      internalErrorMessage: `JWT 토큰 인증 오류가 발생하였습니다.`,
+      internalErrorMessage: `JWT 토큰 인증 오류가 발생하였습니다 (${error.message})`,
       httpStatus: HttpStatus.UNAUTHORIZED,
     });
   }
