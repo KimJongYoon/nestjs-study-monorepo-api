@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateResponse {
   @ApiProperty({
-    example: 200,
+    example: 201,
     description: 'http 상태 코드',
   })
   statusCode: number;
@@ -18,9 +18,10 @@ export class CreateResponse {
     description: '등록된 데이터의 ID',
   })
   dataId: string;
+
   constructor(dataId: string) {
-    this.dataId = dataId;
+    this.statusCode = 201;
     this.message = '정상적으로 등록되었습니다.';
-    this.statusCode = 200;
+    this.dataId = dataId;
   }
 }
