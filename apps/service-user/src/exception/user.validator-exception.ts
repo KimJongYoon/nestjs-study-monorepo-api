@@ -1,5 +1,5 @@
 import { BadRequestException, Logger } from '@nestjs/common';
-import { CreateUserValidator } from '../validator/create.user.validator';
+import { CommonUserValidator } from '../validator/common.user.validator';
 
 export class UserValidatorException {
   /**
@@ -8,7 +8,7 @@ export class UserValidatorException {
    */
   static validateUid(uid: string) {
     const message = `uid: ${uid} is already exist`;
-    Logger.error(message, CreateUserValidator.name);
+    Logger.error(message, CommonUserValidator.name);
     throw new BadRequestException(message);
   }
 
@@ -18,7 +18,7 @@ export class UserValidatorException {
    */
   static validateNickName(nickName: string) {
     const message = `nickName: ${nickName} is already exist`;
-    Logger.error(message, CreateUserValidator.name);
+    Logger.error(message, CommonUserValidator.name);
     throw new BadRequestException(message);
   }
 
@@ -28,7 +28,7 @@ export class UserValidatorException {
    */
   static validateEmail(email: string) {
     const message = `email: ${email} is already exist`;
-    Logger.error(message, CreateUserValidator.name);
+    Logger.error(message, CommonUserValidator.name);
     throw new BadRequestException(message);
   }
 }

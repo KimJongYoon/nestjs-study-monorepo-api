@@ -31,7 +31,7 @@
       "@app/database/*": [
         "libs/database/src/*"
       ],
-      "@app/microservice": [ 
+      "@app/microservice": [
         "libs/microservice/src"
       ],
       "@app/microservice/*": [

@@ -10,8 +10,10 @@ import {
   NatsQueueEnum,
 } from '../../../libs/microservice/src';
 import authConfig from './config/auth.config';
-import { ServiceAuthController } from './service-auth.controller';
-import { ServiceAuthService } from './service-auth.service';
+import { ServiceAdminAuthController } from './controller/service-admin-auth.controller';
+import { ServiceUserAuthController } from './controller/service-auth.controller';
+import { ServiceAdminAccountAuthService } from './service/service-admin-auth.service';
+import { ServiceUserAuthService } from './service/service-auth.service';
 
 @Module({
   imports: [
@@ -40,13 +42,32 @@ import { ServiceAuthService } from './service-auth.service';
       },
     ]),
 
+    ClientsModule.registerAsync([
+      {
+        name: 'NATS_ADMIN_CLIENT',
+        imports: [ConfigModule],
+        useClass: NatsConfigService,
+        inject: [ConfigService],
+        extraProviders: [
+          {
+            provide: 'configName',
+            useValue: NatsConfigNameEnum.SERVICE_AUTH,
+          },
+          {
+            provide: 'queue',
+            useValue: NatsQueueEnum.ADMIN_QUEUE,
+          },
+        ],
+      },
+    ]),
+
     JwtModule.register({
       global: true,
     }),
 
     UsinDatabaseModule,
   ],
-  controllers: [ServiceAuthController],
-  providers: [ServiceAuthService],
+  controllers: [ServiceUserAuthController, ServiceAdminAuthController],
+  providers: [ServiceUserAuthService, ServiceAdminAccountAuthService],
 })
 export class ServiceAuthModule {}

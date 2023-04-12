@@ -18,6 +18,20 @@
     "type": "node",
     "console": "integratedTerminal",
   },
+{
+    "name": "api-admin",
+    "request": "launch",
+    "runtimeArgs": [
+      "run-script",
+      "api-admin:debug"
+    ],
+    "runtimeExecutable": "npm",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node",
+    "console": "integratedTerminal",
+  },
   {
     "name": "service-auth",
     "request": "launch",
@@ -46,6 +60,19 @@
     "type": "node",
     "console": "integratedTerminal",
   },
-  
+ {
+    "name": "service-admin-account",
+    "request": "launch",
+    "runtimeArgs": [
+      "run-script",
+      "service-admin-account:debug"
+    ],
+    "runtimeExecutable": "npm",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node",
+    "console": "integratedTerminal",
+  } 
   ] 
 }

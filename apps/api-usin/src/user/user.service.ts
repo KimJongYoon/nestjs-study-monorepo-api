@@ -3,7 +3,7 @@ import { REQUEST } from '@nestjs/core';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { UserModel } from '../../../../libs/database/src/usin/models/user/user.model';
-import { UserChannelEnum } from '../../../../libs/microservice/src/enum/user.channel.enum';
+import { UserChannelEnum } from '../../../../libs/microservice/src/enum/channel/user.channel.enum';
 import { NatsBuildHelper } from '../../../../libs/microservice/src/helper/nats.build.helper';
 import { CreateUserDto } from './dto/create.user.dto';
 import { EditUserDto } from './dto/edit.user.dto';

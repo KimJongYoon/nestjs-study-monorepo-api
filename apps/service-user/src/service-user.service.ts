@@ -22,13 +22,27 @@ export class ServiceUserService {
   ) {}
 
   /**
+   * [어신] 사용자 정보 상세 조회
+   * @param uid
+   * @returns
+   */
+  async findOneUsin(uid: string): Promise<Partial<ViewUsinUser>> {
+    try {
+      const data = await this.viewServiceUserRepository.findOneUsinByUid(uid);
+      return data;
+    } catch (error) {
+      UserServiceException.findOne(error);
+    }
+  }
+
+  /**
    * 사용자 정보 상세 조회
    * @param uid
    * @returns
    */
   async findOne(uid: string): Promise<Partial<ViewUsinUser>> {
     try {
-      const data = await this.viewServiceUserRepository.findOneByUid(uid);
+      const data = await this.serviceUserRepository.findOneByUid(uid);
       return data;
     } catch (error) {
       UserServiceException.findOne(error);

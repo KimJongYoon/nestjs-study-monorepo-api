@@ -3,20 +3,20 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProxy, NatsContext } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { BcryptHelper } from '../../../libs/core/src';
-import { UsinDatabaseService } from '../../../libs/database/src';
+import { BcryptHelper } from '../../../../libs/core/src';
+import { UsinDatabaseService } from '../../../../libs/database/src';
 import {
   NatsBuildHelper,
   NatsConfigNameEnum,
   NatsHeaderEnum,
   UserChannelEnum,
-} from '../../../libs/microservice/src';
-import { SignInUsinDto } from './dto/signin.usin.dto';
-import { ValidateUsinDto } from './dto/validate.usin.dto';
-import { AuthServiceException } from './exception/auth.service-exception';
+} from '../../../../libs/microservice/src';
+import { SignInUsinDto } from '../dto/signin.usin.dto';
+import { ValidateUsinDto } from '../dto/validate.usin.dto';
+import { AuthServiceException } from '../exception/auth.service-exception';
 
 @Injectable()
-export class ServiceAuthService {
+export class ServiceUserAuthService {
   constructor(
     private readonly usinDatabaseService: UsinDatabaseService,
     private readonly jwtService: JwtService,
@@ -31,14 +31,10 @@ export class ServiceAuthService {
    * @param password
    * @returns
    */
-  async validateUsin(dto: ValidateUsinDto): Promise<any> {
+  async validateUsin(dto: ValidateUsinDto, context: NatsContext): Promise<any> {
     const { uid, password } = dto;
 
-    const user = await this.usinDatabaseService.user.findUnique({
-      where: {
-        uid: uid,
-      },
-    });
+    const user = await this.getUser(context, dto);
 
     const isNotExist = !user;
     if (isNotExist) {
@@ -62,18 +58,7 @@ export class ServiceAuthService {
    * @param dto
    */
   async signInUsin(dto: SignInUsinDto, context: NatsContext) {
-    const headers = context.getHeaders();
-    const requestId = headers.get(NatsHeaderEnum.REQUEST_ID);
-
-    const record = NatsBuildHelper.buildNatsRecord({
-      payload: { uid: dto.uid },
-      context,
-    });
-
-    // 사용자 정보 조회
-    const user = await firstValueFrom(
-      this.client.send(UserChannelEnum.FIND_ONE_USIN, record),
-    );
+    const user = await this.getUser(context, dto);
 
     // jwt payload 설정
     const payload = { uid: user.uid, nickName: user.nickName };
@@ -95,6 +80,28 @@ export class ServiceAuthService {
       accessToken,
       refreshToken,
     };
+  }
+
+  /**
+   * 사용자 정보 조회
+   * @param context
+   * @param dto
+   * @returns
+   */
+  private async getUser(context: NatsContext, dto: SignInUsinDto) {
+    const headers = context.getHeaders();
+    const requestId = headers.get(NatsHeaderEnum.REQUEST_ID);
+
+    const record = NatsBuildHelper.buildNatsRecord({
+      payload: { uid: dto.uid },
+      context,
+    });
+
+    // 사용자 정보 조회
+    const user = await firstValueFrom(
+      this.client.send(UserChannelEnum.FIND_ONE_USIN, record),
+    );
+    return user;
   }
 
   /**

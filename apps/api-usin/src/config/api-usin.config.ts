@@ -1,6 +1,7 @@
 import { registerAs } from '@nestjs/config';
+import { NatsConfigNameEnum } from '../../../../libs/microservice/src';
 
-export default registerAs('api-usin', () => ({
+export default registerAs(NatsConfigNameEnum.API_USIN, () => ({
   name: process.env.NAME,
   port: process.env.PORT,
   microservice: {

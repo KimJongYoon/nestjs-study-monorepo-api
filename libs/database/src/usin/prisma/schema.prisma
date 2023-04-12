@@ -25,9 +25,11 @@ model User {
   email     String       @unique
   nickName  String?      @map("nick_name")
   password  String       @map("password")
+
+  @@map("USER")
 }
 
-model Admin {
+model AdminAccount {
   email     String       @id
   createdAt DateTime?    @default(now()) @map("created_at")
   createdBy String       @map("created_by")
@@ -40,6 +42,8 @@ model Admin {
   nickName  String?      @map("nick_name")
   password  String       @map("password")
   posts     Post[]
+
+  @@map("ADMIN_ACCOUNT")
 }
 
 model Post {
@@ -55,8 +59,10 @@ model Post {
   deletedBy  String?      @map("deleted_by")
   useYn      BooleanTypes @default(Y) @map("use_yn")
   remark     String?
-  Admin      Admin        @relation(fields: [adminEmail], references: [email], onDelete: Cascade, onUpdate: NoAction)
-  adminEmail String
+  Admin      AdminAccount @relation(fields: [adminEmail], references: [email], onDelete: Cascade, onUpdate: NoAction)
+  adminEmail String       @map("admin_email")
+
+  @@map("POST")
 }
 
 // View
@@ -67,6 +73,33 @@ view ViewUsinUser {
   nickName  String   @map("nick_name")
 
   @@map("USIN_VIEW_USER")
+}
+
+view ViewAdminAccount {
+  email     String    @id
+  remark    String?
+  nickName  String?   @map("nick_name")
+  createdAt DateTime? @map("created_at")
+  createdBy String    @map("created_by")
+
+  posts ViewPost[]
+
+  @@map("VIEW_ADMIN_ACCOUNT")
+}
+
+view ViewPost {
+  id        String    @id
+  title     String
+  content   String?
+  published Boolean
+  createdAt DateTime? @map("created_at")
+  createdBy String    @map("created_by")
+  remark    String?
+
+  ViewAdminAccount ViewAdminAccount? @relation(fields: [adminEmail], references: [email])
+  adminEmail       String?           @map("admin_email")
+
+  @@map("VIEW_ADMIN_POST")
 }
 
 enum BooleanTypes {

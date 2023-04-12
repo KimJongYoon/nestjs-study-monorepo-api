@@ -55,10 +55,30 @@
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
       }
+    },
+    "service-admin-account": {
+      "type": "application",
+      "root": "apps/service-admin-account",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-admin-account/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-admin-account/tsconfig.app.json"
+      }
+    },
+    "api-admin": {
+      "type": "application",
+      "root": "apps/api-admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-admin/tsconfig.app.json"
+      }
     }
   },
   "compilerOptions": {
-    "assets": ["**/*.proto"],
+    "assets": [
+      "**/*.proto"
+    ],
     "watchAssets": true,
     "webpack": true
   }
