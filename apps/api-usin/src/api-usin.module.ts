@@ -21,6 +21,8 @@ import { UserModule } from './user/user.module';
       envFilePath: 'apps/api-usin/.env',
       load: [apiUsinConfig],
     }),
+
+    // for Jwt Guard
     ClientsModule.registerAsync([
       {
         name: 'NATS_AUTH_CLIENT',

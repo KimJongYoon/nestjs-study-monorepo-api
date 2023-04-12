@@ -26,9 +26,9 @@ async function bootstrap() {
   const config = configService.get(NatsConfigNameEnum.API_USIN);
 
   const swaggerOptions = new DocumentBuilder()
-    .setTitle('API Usin')
+    .setTitle('Usin API')
     .setDescription('Usin API')
-    .setVersion('1.0')
+    .setVersion(process.env.npm_package_version)
     .addBearerAuth(
       {
         description: `Bearer 포멧의 토큰을 입력<JWT>`,
@@ -45,7 +45,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerOptions, {
     include: [AuthModule, UserModule],
   });
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      defaultModelsExpandDepth: -1,
+      tagsSorter: 'alpha',
+      // operationsSorter: "alpha",
+    },
+  });
 
   Logger.log(`Listening on port ${config.port}`, 'Bootstrap');
 

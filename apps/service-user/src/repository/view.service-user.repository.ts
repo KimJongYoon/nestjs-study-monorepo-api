@@ -22,7 +22,7 @@ export class ViewServiceUserRepository {
    * @param uid
    * @returns
    */
-  async findOneByUid(uid: string): Promise<Partial<ViewUsinUser>> {
+  async findOneUsinByUid(uid: string): Promise<Partial<ViewUsinUser>> {
     const data = await this.usinDatabaseService.viewUsinUser.findUnique({
       where: {
         uid,

@@ -5,18 +5,18 @@ import {
   NatsContext,
   Payload,
 } from '@nestjs/microservices';
-import { AsyncApiPub } from 'nestjs-asyncapi';
-import { AuthChannelEnum } from '../../../libs/microservice/src/enum/auth.channel.enum';
-import { SignInUsinDto } from './dto/signin.usin.dto';
-import { ValidateJwtUsinDto } from './dto/validate-jwt.usin.dto';
-import { ValidateUsinDto } from './dto/validate.usin.dto';
-import { ServiceAuthService } from './service-auth.service';
+import { AsyncApiSub } from 'nestjs-asyncapi';
+import { AuthChannelEnum } from '../../../../libs/microservice/src/enum/channel/auth.channel.enum';
+import { SignInUsinDto } from '../dto/signin.usin.dto';
+import { ValidateJwtUsinDto } from '../dto/validate-jwt.usin.dto';
+import { ValidateUsinDto } from '../dto/validate.usin.dto';
+import { ServiceUserAuthService } from '../service/service-auth.service';
 
 @Controller()
-export class ServiceAuthController {
-  constructor(private readonly serviceAuthService: ServiceAuthService) {}
+export class ServiceUserAuthController {
+  constructor(private readonly serviceAuthService: ServiceUserAuthService) {}
 
-  @AsyncApiPub({
+  @AsyncApiSub({
     channel: AuthChannelEnum.USIN_VALIDATE,
     message: {
       payload: ValidateUsinDto,
@@ -27,11 +27,11 @@ export class ServiceAuthController {
     @Payload() dto: ValidateUsinDto,
     @Ctx() context: NatsContext,
   ) {
-    const data = await this.serviceAuthService.validateUsin(dto);
+    const data = await this.serviceAuthService.validateUsin(dto, context);
     return data;
   }
 
-  @AsyncApiPub({
+  @AsyncApiSub({
     channel: AuthChannelEnum.USIN_SIGN_IN,
     message: {
       payload: SignInUsinDto,
@@ -43,7 +43,7 @@ export class ServiceAuthController {
     return data;
   }
 
-  @AsyncApiPub({
+  @AsyncApiSub({
     channel: AuthChannelEnum.USIN_VALIDATE_TOKEN,
     message: {
       payload: ValidateJwtUsinDto,

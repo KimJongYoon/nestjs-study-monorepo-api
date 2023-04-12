@@ -14,7 +14,7 @@ export class AuthJwtGuardException {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
     throw new InternalServerErrorException(
-      `사용자 인증 작업 중 오류가 발생 하였습니다.`,
+      `jwt 인증 작업 중 오류가 발생 하였습니다.`,
     );
   }
 }

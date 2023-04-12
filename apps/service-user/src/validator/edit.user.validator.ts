@@ -9,9 +9,9 @@ export class EditUserValidator implements EntityValidator<EditUserDto> {
 
   async validate(dto: EditUserDto): Promise<void> {
     // nickName 중복 검사
-    await this.commonUserValidator.validateNickName(dto.nickName);
+    await this.commonUserValidator.validateNickName(dto.nickName, dto.uid);
 
     // email 중복 검사
-    await this.commonUserValidator.validateEmail(dto.email);
+    await this.commonUserValidator.validateEmail(dto.email, dto.uid);
   }
 }

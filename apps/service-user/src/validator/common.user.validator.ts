@@ -11,7 +11,7 @@ export class CommonUserValidator {
    * @param dto
    */
   async validateUid(uid: string) {
-    if(!uid) return;
+    if (!uid) return;
     const savedUserByUid = await this.serviceUserRepository.findOneByUid(uid);
 
     if (savedUserByUid) {
@@ -24,7 +24,7 @@ export class CommonUserValidator {
    * @param dto
    */
   async validateNickName(nickName: string, editRequestUid?: string) {
-    if(!nickName) return;
+    if (!nickName) return;
     const savedUserByNickName =
       await this.serviceUserRepository.findOneByNickName(nickName);
 
@@ -39,7 +39,7 @@ export class CommonUserValidator {
    * @param dto
    */
   async validateEmail(email: string, editRequestUid?: string) {
-    if(!email) return;
+    if (!email) return;
     const savedUserByEmail = await this.serviceUserRepository.findOneByEmail(
       email,
     );

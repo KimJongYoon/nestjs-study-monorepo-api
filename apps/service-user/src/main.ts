@@ -26,9 +26,8 @@ async function bootstrap() {
   const asyncApiOptions = new AsyncApiDocumentBuilder()
     .setTitle('User Service')
     .setDescription('User Service API')
-    .setVersion('1.0')
+    .setVersion(process.env.npm_package_version)
     .setDefaultContentType('application/json')
-    // .addSecurity('user-password', { type: 'userPassword' })
     .addServer('dev', {
       url: `http://localhost:${config.port}`,
       protocol: 'tcp',

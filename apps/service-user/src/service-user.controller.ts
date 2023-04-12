@@ -6,7 +6,7 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { AsyncApiSub } from 'nestjs-asyncapi';
-import { UserChannelEnum } from '../../../libs/microservice/src/enum/user.channel.enum';
+import { UserChannelEnum } from '../../../libs/microservice/src/enum/channel/user.channel.enum';
 import { CreateUserDto } from './dto/create.user.dto';
 import { EditUserDto } from './dto/edit.user.dto';
 import { FindOneUserDto } from './dto/find-one.user.dto';
@@ -17,14 +17,32 @@ export class ServiceUserController {
   constructor(private readonly serviceUserService: ServiceUserService) {}
 
   @AsyncApiSub({
-    summary: '사용자 상세 조회',
-    description: '사용자 상세 정보를 조회합니다.',
+    summary: '[어신] 사용자 상세 조회',
+    description: '[어신] 사용자 상세 정보를 조회합니다.',
     channel: UserChannelEnum.FIND_ONE_USIN,
     message: {
       payload: FindOneUserDto,
     },
   })
   @MessagePattern(UserChannelEnum.FIND_ONE_USIN)
+  async findOneUsin(
+    @Payload() dto: FindOneUserDto,
+    @Ctx() context: NatsContext,
+  ) {
+    const { uid } = dto;
+    const data = await this.serviceUserService.findOneUsin(uid);
+    return data;
+  }
+
+  @AsyncApiSub({
+    summary: '사용자 상세 조회',
+    description: '사용자 상세 정보를 조회합니다.',
+    channel: UserChannelEnum.FIND_ONE,
+    message: {
+      payload: FindOneUserDto,
+    },
+  })
+  @MessagePattern(UserChannelEnum.FIND_ONE)
   async findOne(@Payload() dto: FindOneUserDto, @Ctx() context: NatsContext) {
     const { uid } = dto;
     const data = await this.serviceUserService.findOne(uid);
@@ -48,7 +66,7 @@ export class ServiceUserController {
   @AsyncApiSub({
     summary: '사용자 수정',
     description: '사용자 정보를 수정합니다.',
-    channel: UserChannelEnum.CREATE,
+    channel: UserChannelEnum.EDIT,
     message: {
       payload: EditUserDto,
     },

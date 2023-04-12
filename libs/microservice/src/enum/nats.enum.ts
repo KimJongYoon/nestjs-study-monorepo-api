@@ -1,6 +1,6 @@
-import { AuthChannelEnum } from './auth.channel.enum';
+import { AuthChannelEnum } from './channel/auth.channel.enum';
 import { NatsConfigNameEnum } from './nats.config-name.enum';
-import { UserChannelEnum } from './user.channel.enum';
+import { UserChannelEnum } from './channel/user.channel.enum';
 
 export const natsEnum = {
   auth: {
