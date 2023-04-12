@@ -116,7 +116,7 @@ export class ServiceUserAuthService {
 
       return payload;
     } catch (error) {
-      AuthServiceException.validateAccessTokenUsin(error);
+      AuthServiceException.validateAccessToken(error);
     }
   }
 }

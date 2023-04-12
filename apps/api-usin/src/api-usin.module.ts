@@ -22,7 +22,7 @@ import { UserModule } from './user/user.module';
       load: [apiUsinConfig],
     }),
 
-    // for Usin Jwt Guard
+    // for Jwt Guard
     ClientsModule.registerAsync([
       {
         name: 'NATS_AUTH_CLIENT',

@@ -17,4 +17,12 @@ export class AdminAccountServiceException {
       internalErrorMessage: `관리자 계정 등록 작업 중 오류가 발생 하였습니다.`,
     });
   }
+
+  static edit(error: any) {
+    NatsServiceException.exception({
+      error,
+      serviceName: ServiceAdminAccountService.name,
+      internalErrorMessage: `관리자 계정 정보 수정 작업 중 오류가 발생 하였습니다.`,
+    });
+  }
 }

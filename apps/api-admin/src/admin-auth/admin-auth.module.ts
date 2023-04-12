@@ -9,6 +9,7 @@ import {
 import { AdminAuthController } from './admin-auth.controller';
 import { AdminAuthService } from './admin-auth.service';
 import { AdminAccountLoginGuard } from './guard/admin-account-login.guard';
+import { AdminJwtGuard } from './guard/admin-jwt.guard';
 import { AdminAccountLoginStrategy } from './strategy/admin-account-login.strategy';
 
 @Module({
@@ -37,6 +38,8 @@ import { AdminAccountLoginStrategy } from './strategy/admin-account-login.strate
     AdminAuthService,
     AdminAccountLoginGuard,
     AdminAccountLoginStrategy,
+
+    AdminJwtGuard,
   ],
 })
 export class AdminAuthModule {}

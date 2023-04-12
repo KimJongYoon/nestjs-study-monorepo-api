@@ -8,6 +8,7 @@ import {
 import { AsyncApiSub } from 'nestjs-asyncapi';
 import { AdminChannelEnum } from '../../../libs/microservice/src/enum/channel/admin.channel.enum';
 import { CreateAdminAccountDto } from './dto/create.admin-account.dto';
+import { EditAdminAccountDto } from './dto/edit.admin-account.dto';
 import { FindOneAdminAccountDto } from './dto/find-one.admin-account.dto';
 import { ServiceAdminAccountService } from './service-admin-account.service';
 
@@ -48,6 +49,20 @@ export class ServiceAdminAccountController {
     @Ctx() context: NatsContext,
   ) {
     const data = await this.serviceAdminAccountService.create(dto);
+    return data;
+  }
+
+  @AsyncApiSub({
+    summary: '관리자 계정 정보 수정',
+    description: '관리자 계정 정보를 수정 합니다.',
+    channel: AdminChannelEnum.EDIT,
+    message: {
+      payload: CreateAdminAccountDto,
+    },
+  })
+  @MessagePattern(AdminChannelEnum.EDIT)
+  async edit(@Payload() dto: EditAdminAccountDto, @Ctx() context: NatsContext) {
+    const data = await this.serviceAdminAccountService.edit(dto);
     return data;
   }
 }

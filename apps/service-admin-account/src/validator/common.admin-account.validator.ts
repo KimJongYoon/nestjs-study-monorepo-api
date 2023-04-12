@@ -18,7 +18,7 @@ export class CommonAdminAccountValidator {
       await this.serviceAdminAccountRepository.findOneByNickName(nickName);
 
     const isNotRequestUser =
-      savedUserByNickName?.nickName !== editRequestAdminEmail;
+      savedUserByNickName?.email !== editRequestAdminEmail;
     if (savedUserByNickName && isNotRequestUser) {
       AdminAccountValidatorException.validateNickName(nickName);
     }

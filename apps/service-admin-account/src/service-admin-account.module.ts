@@ -8,6 +8,7 @@ import { ServiceAdminAccountController } from './service-admin-account.controlle
 import { ServiceAdminAccountService } from './service-admin-account.service';
 import { CommonAdminAccountValidator } from './validator/common.admin-account.validator';
 import { CreateAdminAccountValidator } from './validator/create.admin-account.validator';
+import { EditAdminAccountValidator } from './validator/edit.admin-account.validator';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CreateAdminAccountValidator } from './validator/create.admin-account.va
 
     CommonAdminAccountValidator,
     CreateAdminAccountValidator,
+    EditAdminAccountValidator,
   ],
 })
 export class ServiceAdminAccountModule {}

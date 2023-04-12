@@ -3,7 +3,7 @@ import { NatsServiceException } from '../../../../libs/microservice/src/exceptio
 import { ServiceUserAuthService } from '../service/service-auth.service';
 
 export class AuthServiceException {
-  static validateAccessTokenUsin(error: any) {
+  static validateAccessToken(error: any) {
     NatsServiceException.exception({
       error,
       serviceName: ServiceUserAuthService.name,

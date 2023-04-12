@@ -35,7 +35,7 @@ export class ServiceAdminAccountAuthService {
     dto: ValidateAdminAccountDto,
     context: NatsContext,
   ): Promise<any> {
-    const { email, password } = dto;
+    const { email: email, password } = dto;
 
     const admin = await this.getAdminAccount(context, dto);
 
@@ -122,7 +122,7 @@ export class ServiceAdminAccountAuthService {
 
       return payload;
     } catch (error) {
-      AuthServiceException.validateAccessTokenUsin(error);
+      AuthServiceException.validateAccessToken(error);
     }
   }
 }

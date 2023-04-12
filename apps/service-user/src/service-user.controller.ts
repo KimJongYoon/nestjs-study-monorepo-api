@@ -30,7 +30,7 @@ export class ServiceUserController {
     @Ctx() context: NatsContext,
   ) {
     const { uid } = dto;
-    const data = await this.serviceUserService.findOne(uid);
+    const data = await this.serviceUserService.findOneUsin(uid);
     return data;
   }
 

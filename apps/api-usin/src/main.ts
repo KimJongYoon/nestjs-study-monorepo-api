@@ -45,7 +45,13 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerOptions, {
     include: [AuthModule, UserModule],
   });
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api', app, document, {
+    swaggerOptions: {
+      defaultModelsExpandDepth: -1,
+      tagsSorter: 'alpha',
+      // operationsSorter: "alpha",
+    },
+  });
 
   Logger.log(`Listening on port ${config.port}`, 'Bootstrap');
 

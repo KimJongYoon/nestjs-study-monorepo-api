@@ -4,12 +4,12 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { UsinJwtGuard } from '../guard/usin-jwt.guard';
+import { AdminJwtGuard } from '../guard/admin-jwt.guard';
 
-export class AuthJwtGuardException {
+export class AdminAuthJwtGuardException {
   static validate(error: any) {
     error.stack = error?.customStack ?? error?.stack;
-    Logger.error(error.message, error?.stack, UsinJwtGuard.name);
+    Logger.error(error.message, error?.stack, AdminJwtGuard.name);
     if (error?.status) {
       throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
