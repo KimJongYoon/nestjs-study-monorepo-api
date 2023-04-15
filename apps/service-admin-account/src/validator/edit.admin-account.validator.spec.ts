@@ -12,7 +12,7 @@ describe('EditAdminAccountValidator', () => {
   let repository: ServiceAdminAccountRepository;
   const repositoryTemp: Partial<AdminAccount>[] = [];
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [EditAdminAccountValidator, CommonAdminAccountValidator],
     })
@@ -47,7 +47,7 @@ describe('EditAdminAccountValidator', () => {
 
   afterEach(async () => {
     // 각각의 테스트마다 mock 함수를 초기화 합니다.
-    // jest.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('관리자 계정 등록', () => {

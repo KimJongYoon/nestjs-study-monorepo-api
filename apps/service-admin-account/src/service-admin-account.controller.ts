@@ -21,12 +21,12 @@ export class ServiceAdminAccountController {
   @AsyncApiSub({
     summary: '관리자 상세 조회',
     description: '관리자 상세 정보를 조회합니다.',
-    channel: AdminChannelEnum.FIND_ONE,
+    channel: AdminChannelEnum.ACCOUNT_FIND_ONE,
     message: {
       payload: FindOneAdminAccountDto,
     },
   })
-  @MessagePattern(AdminChannelEnum.FIND_ONE)
+  @MessagePattern(AdminChannelEnum.ACCOUNT_FIND_ONE)
   async findOne(
     @Payload() dto: FindOneAdminAccountDto,
     @Ctx() context: NatsContext,
@@ -38,12 +38,12 @@ export class ServiceAdminAccountController {
   @AsyncApiSub({
     summary: '관리자 계정 정보 등록',
     description: '관리자 계정 정보를 등록 합니다.',
-    channel: AdminChannelEnum.CREATE,
+    channel: AdminChannelEnum.ACCOUNT_CREATE,
     message: {
       payload: CreateAdminAccountDto,
     },
   })
-  @MessagePattern(AdminChannelEnum.CREATE)
+  @MessagePattern(AdminChannelEnum.ACCOUNT_CREATE)
   async create(
     @Payload() dto: CreateAdminAccountDto,
     @Ctx() context: NatsContext,
@@ -55,12 +55,12 @@ export class ServiceAdminAccountController {
   @AsyncApiSub({
     summary: '관리자 계정 정보 수정',
     description: '관리자 계정 정보를 수정 합니다.',
-    channel: AdminChannelEnum.EDIT,
+    channel: AdminChannelEnum.ACCOUNT_EDIT,
     message: {
-      payload: CreateAdminAccountDto,
+      payload: EditAdminAccountDto,
     },
   })
-  @MessagePattern(AdminChannelEnum.EDIT)
+  @MessagePattern(AdminChannelEnum.ACCOUNT_EDIT)
   async edit(@Payload() dto: EditAdminAccountDto, @Ctx() context: NatsContext) {
     const data = await this.serviceAdminAccountService.edit(dto);
     return data;

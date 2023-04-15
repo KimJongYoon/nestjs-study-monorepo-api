@@ -10,6 +10,7 @@ import {
 import { AdminAccountModule } from './admin-account/admin-account.module';
 import { AdminAuthModule } from './admin-auth/admin-auth.module';
 import { AdminJwtGuard } from './admin-auth/guard/admin-jwt.guard';
+import { AdminPostModule } from './admin-post/admin-post.module';
 import { ApiAdminController } from './api-admin.controller';
 import { ApiAdminService } from './api-admin.service';
 import apiAdminConfig from './config/api-admin.config';
@@ -44,6 +45,7 @@ import apiAdminConfig from './config/api-admin.config';
 
     AdminAuthModule,
     AdminAccountModule,
+    AdminPostModule,
   ],
   controllers: [ApiAdminController],
   providers: [

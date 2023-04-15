@@ -1,7 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import { CommonEntity } from '../../../../../core/src';
 import { ViewUsinUser } from '../../generated/client';
 
-export class ViewUsinUserModel implements ViewUsinUser {
+export class ViewUsinUserModel
+  extends PickType(CommonEntity, ['createdAt'])
+  implements ViewUsinUser
+{
   @ApiProperty({
     example: 'kakao:123456',
     description: '사용자 아이디',

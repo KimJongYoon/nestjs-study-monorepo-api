@@ -5,4 +5,5 @@ export enum NatsConfigNameEnum {
   SERVICE_AUTH = 'service-auth',
   SERVICE_USER = 'service-user',
   SERVICE_ADMIN_ACCOUNT = 'service-admin-account',
+  SERVICE_POST = 'service-post',
 }

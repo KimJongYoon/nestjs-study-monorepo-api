@@ -84,7 +84,7 @@ export class AdminJwtGuard implements CanActivate {
    * @param payload
    */
   private appendPayload(req: any, payload: any) {
-    req.user = payload;
+    req.adminAccount = payload;
   }
 
   handleRequest(err, user, info) {

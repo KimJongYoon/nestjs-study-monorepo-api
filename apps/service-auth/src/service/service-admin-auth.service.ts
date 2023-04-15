@@ -105,7 +105,7 @@ export class ServiceAdminAccountAuthService {
 
     // 사용자 정보 조회
     const admin = await firstValueFrom(
-      this.client.send(AdminChannelEnum.FIND_ONE, record),
+      this.client.send(AdminChannelEnum.ACCOUNT_FIND_ONE, record),
     );
     return admin;
   }

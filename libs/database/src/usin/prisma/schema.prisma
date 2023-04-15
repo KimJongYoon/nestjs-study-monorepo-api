@@ -14,7 +14,7 @@ datasource db {
 
 model User {
   uid       String       @id
-  createdAt DateTime?    @default(now()) @map("created_at")
+  createdAt DateTime     @default(now()) @map("created_at")
   createdBy String       @map("created_by")
   updatedAt DateTime?    @updatedAt @map("updated_at")
   updatedBy String       @map("updated_by")
@@ -31,7 +31,7 @@ model User {
 
 model AdminAccount {
   email     String       @id
-  createdAt DateTime?    @default(now()) @map("created_at")
+  createdAt DateTime     @default(now()) @map("created_at")
   createdBy String       @map("created_by")
   updatedAt DateTime?    @updatedAt @map("updated_at")
   updatedBy String       @map("updated_by")
@@ -47,20 +47,23 @@ model AdminAccount {
 }
 
 model Post {
-  id         String       @id @default(uuid())
-  title      String       @db.VarChar(255)
-  content    String?
-  published  Boolean      @default(false)
-  createdAt  DateTime?    @default(now()) @map("created_at")
-  createdBy  String       @map("created_by")
-  updatedAt  DateTime?    @updatedAt @map("updated_at")
-  updatedBy  String       @map("updated_by")
-  deletedAt  DateTime?    @map("deleted_at")
-  deletedBy  String?      @map("deleted_by")
-  useYn      BooleanTypes @default(Y) @map("use_yn")
-  remark     String?
-  Admin      AdminAccount @relation(fields: [adminEmail], references: [email], onDelete: Cascade, onUpdate: NoAction)
-  adminEmail String       @map("admin_email")
+  id           String       @id @default(uuid())
+  title        String       @db.VarChar(255)
+  content      String?
+  thumbnailUrl String?      @map("thumbnail_url")
+  published    Boolean      @default(false)
+  readCount    Int          @default(0) @map("read_count")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  createdBy    String       @map("created_by")
+  updatedAt    DateTime?    @updatedAt @map("updated_at")
+  updatedBy    String       @map("updated_by")
+  deletedAt    DateTime?    @map("deleted_at")
+  deletedBy    String?      @map("deleted_by")
+  useYn        BooleanTypes @default(Y) @map("use_yn")
+  remark       String?
+
+  adminEmail   String       @map("admin_email")
+  adminAccount AdminAccount @relation(fields: [adminEmail], references: [email], onDelete: Cascade, onUpdate: NoAction)
 
   @@map("POST")
 }
@@ -82,22 +85,23 @@ view ViewAdminAccount {
   createdAt DateTime? @map("created_at")
   createdBy String    @map("created_by")
 
-  posts ViewPost[]
+  posts ViewAdminPost[]
 
   @@map("VIEW_ADMIN_ACCOUNT")
 }
 
-view ViewPost {
-  id        String    @id
-  title     String
-  content   String?
-  published Boolean
-  createdAt DateTime? @map("created_at")
-  createdBy String    @map("created_by")
-  remark    String?
+view ViewAdminPost {
+  id           String    @id
+  title        String
+  content      String?
+  published    Boolean
+  thumbnailUrl String?   @map("thumbnail_url")
+  adminEmail   String    @map("admin_email")
+  createdAt    DateTime? @map("created_at")
+  createdBy    String    @map("created_by")
+  remark       String?
 
-  ViewAdminAccount ViewAdminAccount? @relation(fields: [adminEmail], references: [email])
-  adminEmail       String?           @map("admin_email")
+  adminAccount ViewAdminAccount? @relation(fields: [adminEmail], references: [email])
 
   @@map("VIEW_ADMIN_POST")
 }

@@ -1,8 +1,12 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PickType } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
+import { CommonEntity } from '../../../../../core/src';
 import { ViewAdminAccount } from '../../generated/client';
 
-export class ViewAdminAccountModel implements ViewAdminAccount {
+export class ViewAdminAccountModel
+  extends PickType(CommonEntity, ['createdAt', 'createdBy', 'remark'])
+  implements ViewAdminAccount
+{
   @ApiProperty({
     example: 'mion@gmail.com',
     description: '관리자 이메일',
@@ -16,25 +20,4 @@ export class ViewAdminAccountModel implements ViewAdminAccount {
   })
   @IsString()
   nickName: string;
-
-  @ApiProperty({
-    description: '등록일시',
-    required: false,
-  })
-  createdAt: Date | null;
-
-  @ApiProperty({
-    example: '등록자',
-    description: '등록자',
-    required: true,
-  })
-  createdBy: string;
-
-  @ApiProperty({
-    example: '비고',
-    description: '비고',
-    required: false,
-  })
-  @IsString()
-  remark: string;
 }

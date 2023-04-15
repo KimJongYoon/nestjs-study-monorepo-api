@@ -1,3 +1,4 @@
+export * from './dto/pagination.dto';
 export * from './entity-builder/entity.builder';
 export * from './entity-builder/entity.validator';
 export * from './entity/common.entity';

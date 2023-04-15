@@ -1,11 +1,12 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
+import { BcryptHelper } from '../../../libs/core/src';
+import { UserModel } from '../../../libs/database/src';
 import { User } from '../../../libs/database/src/usin/generated/client';
 import { CreateUserDto } from './dto/create.user.dto';
 import { EditUserDto } from './dto/edit.user.dto';
 import { ServiceUserRepository } from './repository/service-user.repository';
 import { ServiceUserService } from './service-user.service';
-import { CommonUserValidator } from './validator/common.user.validator';
 import { CreateUserValidator } from './validator/create.user.validator';
 import { EditUserValidator } from './validator/edit.user.validator';
 
@@ -17,13 +18,13 @@ describe('ServiceUserService', () => {
   let editUserValidator: EditUserValidator;
   let repositoryTemp = [];
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [
         ServiceUserService,
-        CreateUserValidator,
-        EditUserValidator,
-        CommonUserValidator,
+        // CreateUserValidator,
+        // EditUserValidator,
+        // CommonUserValidator,
       ],
     })
       .useMocker(createMock)
@@ -45,14 +46,35 @@ describe('ServiceUserService', () => {
         return repositoryTemp.find((item) => item.uid === uid);
       });
 
-    userRepository.edit = jest.fn().mockImplementation((entity: User) => {
-      repositoryTemp = repositoryTemp.map((item) => {
-        if (item.uid === entity.uid) {
-          return entity;
-        }
+    userRepository.findOneByNickName = jest
+      .fn()
+      .mockImplementation((nickName: string) => {
+        return repositoryTemp.find((item) => item.nickName === nickName);
       });
-      return entity;
-    });
+
+    userRepository.findOneByEmail = jest
+      .fn()
+      .mockImplementation((email: string) => {
+        return repositoryTemp.find((item) => item.email === email);
+      });
+
+    userRepository.edit = jest
+      .fn()
+      .mockImplementation((entity: User, uid: string) => {
+        repositoryTemp = repositoryTemp.map((item) => {
+          if (item.uid === uid) {
+            item = Object.assign(item, { ...entity, uid });
+          }
+          return item;
+        });
+        const data = repositoryTemp.find((item) => item.uid === uid);
+        return data;
+      });
+  });
+
+  afterEach(async () => {
+    // 각각의 테스트마다 mock 함수를 초기화 합니다.
+    jest.clearAllMocks();
   });
 
   describe('사용자 등록', () => {
@@ -63,9 +85,24 @@ describe('ServiceUserService', () => {
       dto.password = '123445a!';
       dto.email = 'mion@sgma.io';
 
-      const data = await userService.create(dto);
+      const spyDto = jest.spyOn(dto, 'validate');
 
-      expect(data).toEqual(repositoryTemp[0]);
+      await userService.create(dto);
+      const toBe = await userRepository.findOneByUid(dto.uid);
+
+      const compareData = new UserModel();
+      Object.assign(compareData, toBe);
+
+      compareData.uid = dto.uid;
+      compareData.nickName = dto.nickName;
+      compareData.email = dto.email;
+
+      expect(spyDto).toBeCalledWith(createUserValidator);
+      expect(userRepository.create).toBeCalled();
+      expect(compareData).toEqual(toBe);
+      expect(
+        BcryptHelper.compare(dto.password, toBe.password),
+      ).resolves.toEqual(true);
     });
 
     it('수정 테스트', async () => {
@@ -75,9 +112,25 @@ describe('ServiceUserService', () => {
       dto.password = '123445a!';
       dto.email = 'mion@sgma.i!!!o';
 
-      const data = await userService.edit(dto);
+      const spyDto = jest.spyOn(dto, 'validate');
 
-      expect(data).toEqual(repositoryTemp[0]);
+      const asIs = await userRepository.findOneByUid(dto.uid);
+      await userService.edit(dto);
+      const toBe = await userRepository.findOneByUid(dto.uid);
+
+      const compareData = new UserModel();
+      Object.assign(compareData, asIs);
+
+      compareData.uid = dto.uid;
+      compareData.nickName = dto.nickName;
+      compareData.email = dto.email;
+
+      expect(spyDto).toBeCalledWith(editUserValidator);
+      expect(userRepository.edit).toBeCalled();
+      expect(compareData).toEqual(toBe);
+      expect(
+        BcryptHelper.compare(dto.password, toBe.password),
+      ).resolves.toEqual(true);
     });
   });
 });

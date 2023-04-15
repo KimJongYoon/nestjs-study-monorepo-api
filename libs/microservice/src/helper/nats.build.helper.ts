@@ -3,8 +3,8 @@ import * as nats from 'nats';
 import { NatsHeaderEnum } from '../enum/nats.header.enum';
 
 export class NatsBuildHelper {
-  static buildNatsRecord(params: {
-    payload: any;
+  static buildNatsRecord<T>(params: {
+    payload: Omit<T, 'validate' | 'build'>;
     request?: any;
     context?: NatsContext;
   }): any {

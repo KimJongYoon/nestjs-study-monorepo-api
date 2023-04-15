@@ -9,8 +9,8 @@ import {
 import { ApiExceptionsFilter } from '../../../libs/core/src/filter/api-exception.filter';
 import { NatsConfigNameEnum } from '../../../libs/microservice/src';
 import { ApiUsinModule } from './api-usin.module';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { UsinAuthModule } from './usin-auth/usin-auth.module';
+import { UsinUserModule } from './usin-user/usin-user.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiUsinModule);
@@ -43,7 +43,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerOptions, {
-    include: [AuthModule, UserModule],
+    include: [UsinAuthModule, UsinUserModule],
   });
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {

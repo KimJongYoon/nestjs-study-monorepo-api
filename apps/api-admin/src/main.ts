@@ -10,6 +10,7 @@ import { ApiExceptionsFilter } from '../../../libs/core/src/filter/api-exception
 import { NatsConfigNameEnum } from '../../../libs/microservice/src';
 import { AdminAccountModule } from './admin-account/admin-account.module';
 import { AdminAuthModule } from './admin-auth/admin-auth.module';
+import { AdminPostModule } from './admin-post/admin-post.module';
 import { ApiAdminModule } from './api-admin.module';
 
 async function bootstrap() {
@@ -43,7 +44,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerOptions, {
-    include: [AdminAuthModule, AdminAccountModule],
+    include: [AdminAuthModule, AdminAccountModule, AdminPostModule],
   });
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {
