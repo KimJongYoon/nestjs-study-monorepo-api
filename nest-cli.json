@@ -38,15 +38,6 @@
         "tsConfigPath": "apps/service-user/tsconfig.app.json"
       }
     },
-    "service-fishinggram": {
-      "type": "application",
-      "root": "apps/service-fishinggram",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-fishinggram/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-fishinggram/tsconfig.app.json"
-      }
-    },
     "database": {
       "type": "library",
       "root": "libs/database",
@@ -72,6 +63,15 @@
       "sourceRoot": "apps/api-admin/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api-admin/tsconfig.app.json"
+      }
+    },
+    "service-post": {
+      "type": "application",
+      "root": "apps/service-post",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-post/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-post/tsconfig.app.json"
       }
     }
   },

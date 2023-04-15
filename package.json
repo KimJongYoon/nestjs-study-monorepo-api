@@ -16,6 +16,7 @@
     "service-auth:debug": "cross-env NODE_ENV=local nest start service-auth --debug --watch",
     "service-user:debug": "cross-env NODE_ENV=local nest start service-user --debug --watch",
     "service-admin-account:debug": "cross-env NODE_ENV=local nest start service-admin-account --debug --watch",
+    "service-post:debug": "cross-env NODE_ENV=local nest start service-post --debug --watch",
     "service-fishinggram:debug": "cross-env NODE_ENV=local nest start service-fishinggram --debug --watch",
     "api-usin:prod": "node dist/apps/api-usin/main",
     "start:prod": "node dist/apps/study-api/main",

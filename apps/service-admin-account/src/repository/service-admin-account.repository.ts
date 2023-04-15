@@ -50,7 +50,7 @@ export class ServiceAdminAccountRepository {
    * 관리자 계정 정보 수정
    * @param entity
    */
-  async edit(entity: Prisma.AdminAccountCreateInput, email: string) {
+  async edit(entity: Prisma.AdminAccountUpdateInput, email: string) {
     const data = await this.usinDatabaseService.adminAccount.update({
       where: {
         email: email,

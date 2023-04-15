@@ -1,6 +1,8 @@
 export * as usinClient from './generated/client';
 export * from './models/admin-account/admin-account.model';
 export * from './models/admin-account/view.admin-account.model';
+export * from './models/post/post.model';
+export * from './models/post/view-admin.post.model';
 export * from './models/user/user.model';
 export * from './models/user/view-usin.user.model';
 export * from './usin.database.config';

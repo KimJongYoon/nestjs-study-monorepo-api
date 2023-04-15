@@ -18,7 +18,7 @@ describe('CreateUserValidator', () => {
     },
   ];
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       providers: [CreateUserValidator, CommonUserValidator],
     })
@@ -47,7 +47,7 @@ describe('CreateUserValidator', () => {
 
   afterEach(async () => {
     // 각각의 테스트마다 mock 함수를 초기화 합니다.
-    // jest.restoreAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('사용자 등록', () => {

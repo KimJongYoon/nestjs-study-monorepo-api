@@ -38,8 +38,8 @@ export class FindAllResponse {
 
   constructor(
     pagination: { page: number; size: number },
-    items: object[],
     count: number,
+    items: object[],
   ) {
     this.statusCode = 200;
     this.message = '정상적으로 조회되었습니다.';

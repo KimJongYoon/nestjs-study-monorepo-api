@@ -28,7 +28,7 @@ export class AdminAccountService {
       });
 
       const data = await firstValueFrom(
-        this.client.send(AdminChannelEnum.CREATE, record),
+        this.client.send(AdminChannelEnum.ACCOUNT_CREATE, record),
       );
 
       return data;
@@ -49,7 +49,7 @@ export class AdminAccountService {
       });
 
       const data = await firstValueFrom(
-        this.client.send(AdminChannelEnum.EDIT, record),
+        this.client.send(AdminChannelEnum.ACCOUNT_EDIT, record),
       );
 
       return data;

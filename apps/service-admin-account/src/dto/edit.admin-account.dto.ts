@@ -23,7 +23,6 @@ export class EditAdminAccountDto
 
     return {
       ...this,
-      email: undefined,
       password: password,
       createdBy: this.email,
       updatedBy: this.email,

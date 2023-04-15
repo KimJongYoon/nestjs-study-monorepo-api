@@ -73,6 +73,20 @@
     ],
     "type": "node",
     "console": "integratedTerminal",
+  },
+  {
+    "name": "service-post",
+    "request": "launch",
+    "runtimeArgs": [
+      "run-script",
+      "service-post:debug"
+    ],
+    "runtimeExecutable": "npm",
+    "skipFiles": [
+      "<node_internals>/**"
+    ],
+    "type": "node",
+    "console": "integratedTerminal",
   } 
   ] 
 }

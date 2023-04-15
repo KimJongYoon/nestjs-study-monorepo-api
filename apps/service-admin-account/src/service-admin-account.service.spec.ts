@@ -1,6 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BcryptHelper } from '../../../libs/core/src';
+import { AdminAccountModel } from '../../../libs/database/src';
 import {
   AdminAccount,
   Prisma,
@@ -10,17 +11,22 @@ import { EditAdminAccountDto } from './dto/edit.admin-account.dto';
 import { FindOneAdminAccountDto } from './dto/find-one.admin-account.dto';
 import { ServiceAdminAccountRepository } from './repository/service-admin-account.repository';
 import { ServiceAdminAccountService } from './service-admin-account.service';
+import { CreateAdminAccountValidator } from './validator/create.admin-account.validator';
+import { EditAdminAccountValidator } from './validator/edit.admin-account.validator';
 
 jest.setTimeout(20 * 60 * 1000);
 describe('ServiceAdminAccountService', () => {
   let adminAccountService: ServiceAdminAccountService;
-  let serviceAdminAccountRepository: ServiceAdminAccountRepository;
+  let adminAccountRepository: ServiceAdminAccountRepository;
 
-  let repositoryTemp: Partial<AdminAccount>[] = [];
+  let createAdminAccountValidator: CreateAdminAccountValidator;
+  let editAdminAccountValidator: EditAdminAccountValidator;
 
-  beforeAll(async () => {
+  const repositoryTemp: Partial<AdminAccount>[] = [];
+
+  beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      providers: [ServiceAdminAccountService],
+      providers: [ServiceAdminAccountService, ServiceAdminAccountRepository],
     })
       .useMocker(createMock)
       .compile();
@@ -29,8 +35,16 @@ describe('ServiceAdminAccountService', () => {
       ServiceAdminAccountService,
     );
 
-    serviceAdminAccountRepository = app.get<ServiceAdminAccountRepository>(
+    adminAccountRepository = app.get<ServiceAdminAccountRepository>(
       ServiceAdminAccountRepository,
+    );
+
+    createAdminAccountValidator = app.get<CreateAdminAccountValidator>(
+      CreateAdminAccountValidator,
+    );
+
+    editAdminAccountValidator = app.get<EditAdminAccountValidator>(
+      EditAdminAccountValidator,
     );
 
     repositoryTemp.push({
@@ -39,32 +53,44 @@ describe('ServiceAdminAccountService', () => {
       remark: 'remark',
     });
 
-    serviceAdminAccountRepository.findOneByEmail = jest
+    adminAccountRepository.findOneByEmail = jest
       .fn()
       .mockImplementation((email: string) => {
         return repositoryTemp.find((item) => item.email === email);
       });
 
-    serviceAdminAccountRepository.create = jest
+    adminAccountRepository.create = jest
       .fn()
       .mockImplementation((entity: Prisma.AdminAccountCreateInput) => {
+        delete (entity as any).validate;
+        entity.createdAt = new Date();
+        entity.createdBy = entity.email;
         repositoryTemp.push(entity as AdminAccount);
         return entity;
       });
 
-    serviceAdminAccountRepository.edit = jest
+    adminAccountRepository.edit = jest
       .fn()
       .mockImplementation(
-        (entity: Prisma.AdminAccountUpdateInput, email: string) => {
-          repositoryTemp = repositoryTemp.map((item) => {
-            if (item.email === email) {
-              item = { ...entity, email } as AdminAccount;
-            }
-            return item as AdminAccount;
-          });
-          return { ...entity, email };
+        (entity: Prisma.AdminAccountUncheckedUpdateInput, email: string) => {
+          delete (entity as any).validate;
+
+          const index = repositoryTemp.findIndex(
+            (item) => item.email === email,
+          );
+
+          repositoryTemp[index] = {
+            ...repositoryTemp[index],
+            ...entity,
+          } as any;
+
+          return repositoryTemp[index];
         },
       );
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   describe('사용자 상세 조회', () => {
@@ -84,11 +110,22 @@ describe('ServiceAdminAccountService', () => {
       dto.nickName = 'create-mion';
       dto.password = 'password';
 
-      const data = await adminAccountService.create(dto);
+      const spyDto = jest.spyOn(dto, 'validate');
 
-      expect(data).toEqual(repositoryTemp[repositoryTemp.length - 1]);
+      await adminAccountService.create(dto);
+      const toBe = await adminAccountRepository.findOneByEmail(dto.email);
+
+      const compareData = new AdminAccountModel();
+      Object.assign(compareData, toBe);
+
+      compareData.email = dto.email;
+      compareData.nickName = dto.nickName;
+
+      expect(spyDto).toBeCalledWith(createAdminAccountValidator);
+      expect(adminAccountRepository.create).toBeCalled();
+      expect(compareData).toEqual(toBe);
       expect(
-        BcryptHelper.compare(dto.password, data.password),
+        BcryptHelper.compare(dto.password, toBe.password),
       ).resolves.toEqual(true);
     });
   });
@@ -100,11 +137,24 @@ describe('ServiceAdminAccountService', () => {
       dto.nickName = 'edit-mion';
       dto.password = 'password';
 
-      const data = await adminAccountService.edit(dto);
+      const spyDto = jest.spyOn(dto, 'validate');
 
-      expect(data).toEqual(repositoryTemp[repositoryTemp.length - 1]);
+      const asIs = await adminAccountRepository.findOneByEmail(dto.email);
+      await adminAccountService.edit(dto);
+      const toBe = await adminAccountRepository.findOneByEmail(dto.email);
+
+      const compareData = new AdminAccountModel();
+      Object.assign(compareData, asIs);
+
+      compareData.email = dto.email;
+      compareData.nickName = dto.nickName;
+      compareData.password = toBe.password;
+
+      expect(spyDto).toBeCalledWith(editAdminAccountValidator);
+      expect(adminAccountRepository.edit).toBeCalled();
+      expect(compareData).toEqual(toBe);
       expect(
-        BcryptHelper.compare(dto.password, data.password),
+        BcryptHelper.compare(dto.password, toBe.password),
       ).resolves.toEqual(true);
     });
   });

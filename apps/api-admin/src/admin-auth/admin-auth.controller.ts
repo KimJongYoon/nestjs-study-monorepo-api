@@ -10,7 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateResponse, LoginResponse } from '../../../../libs/core/src';
 import { PassJwtGuard } from '../../../../libs/core/src/meta/public.meta';
-import { LoginAuthResponse } from '../../../api-usin/src/auth/response/login.auth.response';
+import { LoginAuthResponse } from '../../../api-usin/src/usin-auth/response/login.auth.response';
 import { AdminAuthService } from './admin-auth.service';
 import { AdminLoginAuthDto } from './dto/admin-login.auth.dto';
 import { AdminAccountLoginGuard } from './guard/admin-account-login.guard';

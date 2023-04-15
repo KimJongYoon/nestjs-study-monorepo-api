@@ -2,6 +2,7 @@ import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
+  ApiCreatedResponse,
   ApiExtraModels,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -16,17 +17,17 @@ import { CreateAdminAccountDto } from './dto/create.admin-account.dto';
 import { EditAdminAccountDto } from './dto/edit.admin-account.dto';
 
 @ApiTags('관리자 계정 관리')
-@ApiExtraModels()
 @ApiBearerAuth('access-token')
+@ApiExtraModels(CreateResponse, EditResponse)
 @ApiInternalServerErrorResponse({ description: '서버 에러' })
-@Controller('admin-account')
+@Controller('account')
 export class AdminAccountController {
   constructor(private readonly adminAccountService: AdminAccountService) {}
 
   @Post()
   @PassJwtGuard()
   @ApiOperation({ summary: '관리자 계정 생성' })
-  @ApiOkResponse({ type: CreateResponse })
+  @ApiCreatedResponse({ type: CreateResponse })
   @ApiBadRequestResponse({ description: '잘못된 요청' })
   async create(@Body() dto: CreateAdminAccountDto) {
     const data = await this.adminAccountService.create(dto);

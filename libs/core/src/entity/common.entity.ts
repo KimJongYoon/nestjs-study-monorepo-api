@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BooleanTypes } from '../../../database/src/usin/generated/client';
 
-export abstract class CommonEntity {
+export class CommonEntity {
   @ApiProperty({
     description: '등록일시',
     required: false,
   })
-  createdAt: Date | null;
+  createdAt: Date;
 
   @ApiProperty({
     example: '등록자',
