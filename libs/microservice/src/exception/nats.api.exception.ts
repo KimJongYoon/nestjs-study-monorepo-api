@@ -1,5 +1,6 @@
 import {
   HttpException,
+  HttpStatus,
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
@@ -19,7 +20,7 @@ export class NatsApiException {
 
     Logger.error(error.message, error?.stack, serviceName);
 
-    if (error?.status) {
+    if (Object.values(HttpStatus).includes(error?.status)) {
       throw new HttpException(error.message, error.status);
     }
     throw new InternalServerErrorException(internalErrorMessage);

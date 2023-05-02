@@ -20,7 +20,7 @@ import { EditAdminAccountDto } from './dto/edit.admin-account.dto';
 @ApiBearerAuth('access-token')
 @ApiExtraModels(CreateResponse, EditResponse)
 @ApiInternalServerErrorResponse({ description: '서버 에러' })
-@Controller('account')
+@Controller('accounts')
 export class AdminAccountController {
   constructor(private readonly adminAccountService: AdminAccountService) {}
 

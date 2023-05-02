@@ -19,7 +19,9 @@ export class NatsServiceException {
     const { error, serviceName, internalErrorMessage, httpStatus } = params;
     Logger.error(error, error?.stack, serviceName);
 
-    if (httpStatus) throw new HttpException(internalErrorMessage, httpStatus);
+    if (Object.values(HttpStatus).includes(httpStatus)) {
+      throw new HttpException(internalErrorMessage, httpStatus);
+    }
     if (error instanceof BadRequestException) throw error;
     throw new InternalServerErrorException(internalErrorMessage);
   }

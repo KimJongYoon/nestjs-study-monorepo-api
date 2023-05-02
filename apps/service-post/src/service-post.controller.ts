@@ -9,8 +9,10 @@ import { AsyncApiSub } from 'nestjs-asyncapi';
 import { PostChannelEnum } from '../../../libs/microservice/src/enum/channel/post.channel.enum';
 import { CreatePostDto } from './dto/create.post.dto';
 import { EditPostDto } from './dto/edit.post.dto';
-import { FindAllPostDto } from './dto/find-all.post.dto';
-import { FindOnePostDto } from './dto/find-one.post.dto';
+import { FindAllViewAdminPostDto } from './dto/find-all.view-admin-post.dto';
+import { FindAllViewUsinPostDto } from './dto/find-all.view-usin-post.dto';
+import { FindOneViewAdminPostDto } from './dto/find-one.view-admin-post.dto';
+import { FindOneViewUsinPostDto } from './dto/find-one.view-usin-post.dto';
 import { RemovePostDto } from './dto/remove.post.dto';
 import { ServicePostService } from './service-post.service';
 
@@ -19,16 +21,16 @@ export class ServicePostController {
   constructor(private readonly servicePostService: ServicePostService) {}
 
   @AsyncApiSub({
-    summary: '포스트 목록 조회',
-    description: '포스트 정보를 목록 조회 합니다.',
+    summary: '[어드민] 포스트 목록 조회',
+    description: '[어드민] 포스트 정보를 목록 조회 합니다.',
     channel: PostChannelEnum.FIND_ALL_ADMIN,
     message: {
-      payload: FindAllPostDto,
+      payload: FindAllViewAdminPostDto,
     },
   })
   @MessagePattern(PostChannelEnum.FIND_ALL_ADMIN)
   async findAllAdmin(
-    @Payload() dto: FindAllPostDto,
+    @Payload() dto: FindAllViewAdminPostDto,
     @Ctx() context: NatsContext,
   ) {
     const [datas, count] = await this.servicePostService.findAllAdmin(dto);
@@ -36,19 +38,53 @@ export class ServicePostController {
   }
 
   @AsyncApiSub({
-    summary: '포스트 상세 조회',
-    description: '포스트 정보를 상세 조회 합니다.',
+    summary: '[어드민] 포스트 상세 조회',
+    description: '[어드민] 포스트 정보를 상세 조회 합니다.',
     channel: PostChannelEnum.FIND_ONE_ADMIN,
     message: {
-      payload: FindAllPostDto,
+      payload: FindAllViewAdminPostDto,
     },
   })
   @MessagePattern(PostChannelEnum.FIND_ONE_ADMIN)
   async findOneAdmin(
-    @Payload() dto: FindOnePostDto,
+    @Payload() dto: FindOneViewAdminPostDto,
     @Ctx() context: NatsContext,
   ) {
     const data = await this.servicePostService.findOneAdmin(dto);
+    return data;
+  }
+
+  @AsyncApiSub({
+    summary: '[어신] 포스트 목록 조회',
+    description: '[어신] 포스트 정보를 목록 조회 합니다.',
+    channel: PostChannelEnum.FIND_ALL_USIN,
+    message: {
+      payload: FindAllViewUsinPostDto,
+    },
+  })
+  @MessagePattern(PostChannelEnum.FIND_ALL_USIN)
+  async findAllUsin(
+    @Payload() dto: FindAllViewUsinPostDto,
+    @Ctx() context: NatsContext,
+  ) {
+    const [datas, count] = await this.servicePostService.findAllUsin(dto);
+    return [datas, count];
+  }
+
+  @AsyncApiSub({
+    summary: '[어신] 포스트 상세 조회',
+    description: '[어신] 포스트 정보를 상세 조회 합니다.',
+    channel: PostChannelEnum.FIND_ONE_USIN,
+    message: {
+      payload: FindAllViewAdminPostDto,
+    },
+  })
+  @MessagePattern(PostChannelEnum.FIND_ONE_USIN)
+  async findOneUsin(
+    @Payload() dto: FindOneViewUsinPostDto,
+    @Ctx() context: NatsContext,
+  ) {
+    const data = await this.servicePostService.findOneUsin(dto);
     return data;
   }
 

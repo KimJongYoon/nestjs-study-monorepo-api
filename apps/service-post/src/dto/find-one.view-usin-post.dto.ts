@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class FindOnePostDto {
+export class FindOneViewUsinPostDto {
   @IsString()
   postId: string;
 }

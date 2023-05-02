@@ -30,7 +30,7 @@ import { UsinUserService } from './usin-user.service';
 )
 @ApiBearerAuth('access-token')
 @ApiInternalServerErrorResponse({ description: '서버 에러' })
-@Controller('user')
+@Controller('users')
 export class UsinUserController {
   constructor(private readonly userService: UsinUserService) {}
 
