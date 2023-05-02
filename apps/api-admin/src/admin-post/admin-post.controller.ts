@@ -41,7 +41,7 @@ import { FindOneAdminPostResponse } from './response/find-one.admin-post.respons
   FindOneAdminPostResponse,
 )
 @ApiInternalServerErrorResponse({ description: '서버 에러' })
-@Controller('post')
+@Controller('posts')
 export class AdminPostController {
   constructor(private readonly adminPostService: AdminPostService) {}
 

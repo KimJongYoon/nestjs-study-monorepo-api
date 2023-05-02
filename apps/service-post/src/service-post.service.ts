@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePostDto } from './dto/create.post.dto';
 import { EditPostDto } from './dto/edit.post.dto';
-import { FindAllPostDto } from './dto/find-all.post.dto';
-import { FindOnePostDto } from './dto/find-one.post.dto';
+import { FindAllViewAdminPostDto } from './dto/find-all.view-admin-post.dto';
+import { FindAllViewUsinPostDto } from './dto/find-all.view-usin-post.dto';
+import { FindOneViewAdminPostDto } from './dto/find-one.view-admin-post.dto';
+import { FindOneViewUsinPostDto } from './dto/find-one.view-usin-post.dto';
 import { RemovePostDto } from './dto/remove.post.dto';
 import { PostServiceException } from './exception/post.service-exception';
 import { ServicePostRepository } from './repository/service-post.repository';
-import { ViewAdminServicePostRepository } from './repository/view-adminservice-post.repository';
+import { ViewAdminServicePostRepository } from './repository/view-admin.service-post.repository';
+import { ViewUsinServicePostRepository } from './repository/view-usin.service-post.repository';
 import { EditPostValidator } from './validator/edit.post.validator';
 import { RemovePostValidator } from './validator/remove.post.validator';
 
@@ -16,6 +19,7 @@ export class ServicePostService {
     // repository
     private readonly servicePostRepository: ServicePostRepository,
     private readonly viewAdminServicePostRepository: ViewAdminServicePostRepository,
+    private readonly viewUsinServicePostRepository: ViewUsinServicePostRepository,
 
     // validator
     private readonly editPostValidator: EditPostValidator,
@@ -26,7 +30,7 @@ export class ServicePostService {
    * @param dto
    * @returns
    */
-  async findAllAdmin(dto: FindAllPostDto) {
+  async findAllAdmin(dto: FindAllViewAdminPostDto) {
     try {
       const [datas, count] = await this.viewAdminServicePostRepository.findAll(
         dto,
@@ -42,11 +46,41 @@ export class ServicePostService {
    * [어드민] 포스트 상세 조회
    * @param dto
    */
-  async findOneAdmin(dto: FindOnePostDto) {
+  async findOneAdmin(dto: FindOneViewAdminPostDto) {
     try {
       const data = await this.viewAdminServicePostRepository.findOneOrThrow(
         dto,
       );
+
+      return data;
+    } catch (error) {
+      PostServiceException.findOne(error, dto.postId);
+    }
+  }
+
+  /**
+   * [어신] 포스트 목록 조회
+   * @param dto
+   */
+  async findAllUsin(dto: FindAllViewUsinPostDto) {
+    try {
+      const [datas, count] = await this.viewUsinServicePostRepository.findAll(
+        dto,
+      );
+
+      return [datas, count];
+    } catch (error) {
+      PostServiceException.findAll(error);
+    }
+  }
+
+  /**
+   * [어신] 포스트 상세 조회
+   * @param dto
+   */
+  async findOneUsin(dto: FindOneViewUsinPostDto) {
+    try {
+      const data = await this.viewUsinServicePostRepository.findOneOrThrow(dto);
 
       return data;
     } catch (error) {

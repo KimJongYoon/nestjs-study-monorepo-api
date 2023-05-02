@@ -10,6 +10,7 @@ import { ApiExceptionsFilter } from '../../../libs/core/src/filter/api-exception
 import { NatsConfigNameEnum } from '../../../libs/microservice/src';
 import { ApiUsinModule } from './api-usin.module';
 import { UsinAuthModule } from './usin-auth/usin-auth.module';
+import { UsinPostModule } from './usin-post/usin-post.module';
 import { UsinUserModule } from './usin-user/usin-user.module';
 
 async function bootstrap() {
@@ -43,7 +44,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerOptions, {
-    include: [UsinAuthModule, UsinUserModule],
+    include: [UsinAuthModule, UsinUserModule, UsinPostModule],
   });
   SwaggerModule.setup('api', app, document, {
     swaggerOptions: {

@@ -106,6 +106,17 @@ view ViewAdminPost {
   @@map("VIEW_ADMIN_POST")
 }
 
+view ViewUsinPost {
+  id           String    @id
+  title        String
+  content      String?
+  thumbnailUrl String?   @map("thumbnail_url")
+  createdAt    DateTime? @map("created_at")
+  createdBy    String    @map("created_by")
+
+  @@map("VIEW_USIN_POST")
+}
+
 enum BooleanTypes {
   Y
   N

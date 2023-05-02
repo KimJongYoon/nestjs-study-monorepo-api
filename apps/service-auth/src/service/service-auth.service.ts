@@ -99,7 +99,7 @@ export class ServiceUserAuthService {
 
     // 사용자 정보 조회
     const user = await firstValueFrom(
-      this.client.send(UserChannelEnum.FIND_ONE_USIN, record),
+      this.client.send(UserChannelEnum.FIND_ONE, record),
     );
     return user;
   }

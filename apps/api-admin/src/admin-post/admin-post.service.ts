@@ -6,8 +6,8 @@ import { NatsBuildHelper } from '../../../../libs/microservice/src';
 import { PostChannelEnum } from '../../../../libs/microservice/src/enum/channel/post.channel.enum';
 import { CreatePostDto } from '../../../service-post/src/dto/create.post.dto';
 import { EditPostDto } from '../../../service-post/src/dto/edit.post.dto';
-import { FindAllPostDto } from '../../../service-post/src/dto/find-all.post.dto';
-import { FindOnePostDto } from '../../../service-post/src/dto/find-one.post.dto';
+import { FindAllViewAdminPostDto } from '../../../service-post/src/dto/find-all.view-admin-post.dto';
+import { FindOneViewAdminPostDto } from '../../../service-post/src/dto/find-one.view-admin-post.dto';
 import { RemovePostDto } from '../../../service-post/src/dto/remove.post.dto';
 import { CreateAdminPostDto } from './dto/create.admin-post.dto';
 import { EditAdminPostDto } from './dto/edit.admin-post.dto';
@@ -27,7 +27,7 @@ export class AdminPostService {
    */
   async findAll(dto: FindAllAdminPostDto) {
     try {
-      const record = NatsBuildHelper.buildNatsRecord<FindAllPostDto>({
+      const record = NatsBuildHelper.buildNatsRecord<FindAllViewAdminPostDto>({
         payload: dto,
         request: this.request,
       });
@@ -48,7 +48,7 @@ export class AdminPostService {
    */
   async findOne(postId: string) {
     try {
-      const record = NatsBuildHelper.buildNatsRecord<FindOnePostDto>({
+      const record = NatsBuildHelper.buildNatsRecord<FindOneViewAdminPostDto>({
         payload: { postId: postId },
         request: this.request,
       });

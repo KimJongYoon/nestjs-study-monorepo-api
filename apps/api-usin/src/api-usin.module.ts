@@ -12,6 +12,7 @@ import { ApiUsinService } from './api-usin.service';
 import apiUsinConfig from './config/api-usin.config';
 import { UsinJwtGuard } from './usin-auth/guard/usin-jwt.guard';
 import { UsinAuthModule } from './usin-auth/usin-auth.module';
+import { UsinPostModule } from './usin-post/usin-post.module';
 import { UsinUserModule } from './usin-user/usin-user.module';
 
 @Module({
@@ -44,6 +45,7 @@ import { UsinUserModule } from './usin-user/usin-user.module';
 
     UsinAuthModule,
     UsinUserModule,
+    UsinPostModule,
   ],
   controllers: [ApiUsinController],
   providers: [
