@@ -49,6 +49,27 @@ export class ServicePostRepository {
 
     return data;
   }
+
+  /**
+   * 조회 수 증가
+   * @param postId
+   * @returns
+   */
+  async increaseReadCount(postId: string) {
+    const data = await this.usinDatabaseService.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        readCount: {
+          increment: 1,
+        },
+      },
+    });
+
+    return data;
+  }
+
   /**
    * 포스트 삭제
    * @param entity
