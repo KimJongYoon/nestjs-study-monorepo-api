@@ -1,4 +1,5 @@
 import { Controller } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
   Ctx,
   MessagePattern,
@@ -14,11 +15,16 @@ import { FindAllViewUsinPostDto } from './dto/find-all.view-usin-post.dto';
 import { FindOneViewAdminPostDto } from './dto/find-one.view-admin-post.dto';
 import { FindOneViewUsinPostDto } from './dto/find-one.view-usin-post.dto';
 import { RemovePostDto } from './dto/remove.post.dto';
+import { FindOneViewUsinPostEvent } from './event/find-one.view-usin-post.event';
+import { PostEventEnum } from './event/post.event-enum';
 import { ServicePostService } from './service-post.service';
 
 @Controller()
 export class ServicePostController {
-  constructor(private readonly servicePostService: ServicePostService) {}
+  constructor(
+    private readonly servicePostService: ServicePostService,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   @AsyncApiSub({
     summary: '[어드민] 포스트 목록 조회',
@@ -85,6 +91,13 @@ export class ServicePostController {
     @Ctx() context: NatsContext,
   ) {
     const data = await this.servicePostService.findOneUsin(dto);
+
+    // 어신 포스트 상세 조회 이벤트 발생
+    await this.eventEmitter.emitAsync(
+      PostEventEnum.POST_FIND_ONE_USIN,
+      new FindOneViewUsinPostEvent(data),
+    );
+
     return data;
   }
 
