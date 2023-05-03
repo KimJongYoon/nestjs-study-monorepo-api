@@ -1,5 +1,7 @@
 import { Controller } from '@nestjs/common';
+
 import { EventEmitter2 } from '@nestjs/event-emitter';
+
 import {
   Ctx,
   MessagePattern,
@@ -21,10 +23,12 @@ import { ServicePostService } from './service-post.service';
 
 @Controller()
 export class ServicePostController {
+
   constructor(
     private readonly servicePostService: ServicePostService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
+
 
   @AsyncApiSub({
     summary: '[어드민] 포스트 목록 조회',
@@ -91,6 +95,7 @@ export class ServicePostController {
     @Ctx() context: NatsContext,
   ) {
     const data = await this.servicePostService.findOneUsin(dto);
+
 
     // 어신 포스트 상세 조회 이벤트 발생
     await this.eventEmitter.emitAsync(

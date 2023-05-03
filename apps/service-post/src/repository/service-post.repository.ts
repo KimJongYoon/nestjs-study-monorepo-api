@@ -69,6 +69,7 @@ export class ServicePostRepository {
 
     return data;
   }
+
   /**
    * 포스트 삭제
    * @param entity

@@ -21,7 +21,7 @@ import { RemovePostValidator } from './validator/remove.post.validator';
       envFilePath: 'apps/service-post/.env',
       load: [postConfig, usinDatabaseConfig],
     }),
-
+    
     EventEmitterModule.forRoot(),
 
     UsinDatabaseModule,
