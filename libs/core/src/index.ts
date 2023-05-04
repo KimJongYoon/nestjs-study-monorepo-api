@@ -1,3 +1,5 @@
+export * from './cache/cache.config.service';
+export * from './cache/cache.evict.decorator';
 export * from './dto/pagination-order.dto';
 export * from './dto/pagination.dto';
 export * from './entity-builder/entity.builder';

@@ -1,12 +1,15 @@
+import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ClientsModule } from '@nestjs/microservices';
+import { CacheConfigService } from '../../../libs/core/src/cache/cache.config.service';
 import {
   NatsConfigNameEnum,
   NatsConfigService,
   NatsQueueEnum,
 } from '../../../libs/microservice/src';
+import { CacheInvalidationMicroserviceInterceptor } from '../../../libs/microservice/src/cache/cache.invalidation.microservice.interceptor';
 import { ApiUsinController } from './api-usin.controller';
 import { ApiUsinService } from './api-usin.service';
 import apiUsinConfig from './config/api-usin.config';
@@ -43,6 +46,19 @@ import { UsinUserModule } from './usin-user/usin-user.module';
       },
     ]),
 
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useClass: CacheConfigService,
+      inject: [ConfigService],
+      extraProviders: [
+        {
+          provide: 'configName',
+          useValue: NatsConfigNameEnum.API_USIN,
+        },
+      ],
+    }),
+
     UsinAuthModule,
     UsinUserModule,
     UsinPostModule,
@@ -53,6 +69,10 @@ import { UsinUserModule } from './usin-user/usin-user.module';
     {
       provide: APP_GUARD, // 전역으로 사용할 guard 설정
       useClass: UsinJwtGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInvalidationMicroserviceInterceptor,
     },
   ],
 })

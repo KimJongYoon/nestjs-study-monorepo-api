@@ -8,4 +8,9 @@ export default registerAs(NatsConfigNameEnum.API_USIN, () => ({
     url: process.env.MICROSERVICE_URL,
     timeout: process.env.MICROSERVICE_TIMEOUT,
   },
+  cache: {
+    host: process.env.CACHE_HOST ?? 'localhost',
+    port: process.env.CACHE_PORT ?? 6379,
+    ttl: process.env.CACHE_TTL ?? 1000,
+  },
 }));

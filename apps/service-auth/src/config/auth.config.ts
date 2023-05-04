@@ -14,4 +14,9 @@ export default registerAs(NatsConfigNameEnum.SERVICE_AUTH, () => ({
     refreshTokenSecret: process.env.JWT_REFRESH_SECRET,
     refreshTokenExpiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRES_IN,
   },
+  cache: {
+    host: process.env.CACHE_HOST ?? 'localhost',
+    port: process.env.CACHE_PORT ?? 6379,
+    ttl: process.env.CACHE_TTL ?? 1000,
+  },
 }));

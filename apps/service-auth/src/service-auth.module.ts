@@ -1,7 +1,10 @@
-import { Module } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { ClientsModule } from '@nestjs/microservices';
+import { CacheConfigService } from '../../../libs/core/src/cache/cache.config.service';
 import { UsinDatabaseModule } from '../../../libs/database/src';
 import usinDatabaseConfig from '../../../libs/database/src/usin/usin.database.config';
 import {
@@ -65,9 +68,26 @@ import { ServiceUserAuthService } from './service/service-auth.service';
       global: true,
     }),
 
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useClass: CacheConfigService,
+      inject: [ConfigService],
+      extraProviders: [
+        {
+          provide: 'configName',
+          useValue: NatsConfigNameEnum.SERVICE_AUTH,
+        },
+      ],
+    }),
+
     UsinDatabaseModule,
   ],
   controllers: [ServiceUserAuthController, ServiceAdminAuthController],
-  providers: [ServiceUserAuthService, ServiceAdminAccountAuthService],
+  providers: [
+    ServiceUserAuthService,
+    ServiceAdminAccountAuthService,
+    { provide: APP_INTERCEPTOR, useClass: CacheInterceptor },
+  ],
 })
 export class ServiceAuthModule {}

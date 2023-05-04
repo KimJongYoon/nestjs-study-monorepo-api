@@ -1,8 +1,14 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { CacheModule, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CacheConfigService } from '../../../libs/core/src';
 import { UsinDatabaseModule } from '../../../libs/database/src';
 import usinDatabaseConfig from '../../../libs/database/src/usin/usin.database.config';
+import {
+  CacheInvalidationMicroserviceInterceptor,
+  NatsConfigNameEnum,
+} from '../../../libs/microservice/src';
 import postConfig from './config/post.config';
 import { ServicePostRepository } from './repository/service-post.repository';
 import { ViewAdminServicePostRepository } from './repository/view-admin.service-post.repository';
@@ -21,8 +27,21 @@ import { RemovePostValidator } from './validator/remove.post.validator';
       envFilePath: 'apps/service-post/.env',
       load: [postConfig, usinDatabaseConfig],
     }),
-    
+
     EventEmitterModule.forRoot(),
+
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      useClass: CacheConfigService,
+      inject: [ConfigService],
+      extraProviders: [
+        {
+          provide: 'configName',
+          useValue: NatsConfigNameEnum.SERVICE_POST,
+        },
+      ],
+    }),
 
     UsinDatabaseModule,
   ],
@@ -39,6 +58,11 @@ import { RemovePostValidator } from './validator/remove.post.validator';
     CommonPostValidator,
     EditPostValidator,
     RemovePostValidator,
+
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CacheInvalidationMicroserviceInterceptor,
+    },
   ],
 })
 export class ServicePostModule {}

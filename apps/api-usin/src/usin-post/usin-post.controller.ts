@@ -1,4 +1,5 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiExtraModels,
@@ -24,6 +25,7 @@ import { UsinPostService } from './usin-post.service';
 )
 @ApiBearerAuth('access-token')
 @ApiInternalServerErrorResponse({ description: '서버 에러' })
+@UseInterceptors(CacheInterceptor) // cache
 @Controller('posts')
 export class UsinPostController {
   constructor(private readonly usinPostService: UsinPostService) {}
