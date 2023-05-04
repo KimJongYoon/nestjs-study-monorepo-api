@@ -1,90 +1,42 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { randomUUID } from 'crypto';
 import { PostModel } from '../../../libs/database/src';
-import {
-  BooleanTypes,
-  Prisma,
-} from '../../../libs/database/src/usin/generated/client';
+import { BooleanTypes } from '../../../libs/database/src/usin/generated/client';
 import { CreatePostDto } from './dto/create.post.dto';
 import { EditPostDto } from './dto/edit.post.dto';
 import { RemovePostDto } from './dto/remove.post.dto';
 import { ServicePostRepository } from './repository/service-post.repository';
+import {
+  postRepository,
+  postRepositoryDB,
+} from './repository/service-post.repository.spec';
 import { ServicePostService } from './service-post.service';
 import { EditPostValidator } from './validator/edit.post.validator';
 
 jest.setTimeout(20 * 60 * 1000);
 describe('ServicePostService', () => {
   let postService: ServicePostService;
-  let postRepository: ServicePostRepository;
   let editPostValidator: EditPostValidator;
-  const repositoryTemp: Partial<PostModel>[] = [];
+  let postId: string;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      providers: [ServicePostService, ServicePostRepository],
+      providers: [
+        ServicePostService,
+        {
+          provide: ServicePostRepository,
+          useValue: postRepository,
+        },
+      ],
     })
       .useMocker(createMock)
       .compile();
 
     postService = app.get<ServicePostService>(ServicePostService);
-    postRepository = app.get<ServicePostRepository>(ServicePostRepository);
     editPostValidator = app.get<EditPostValidator>(EditPostValidator);
-
-    postRepository.create = jest
-      .fn()
-      .mockImplementation((entity: Prisma.PostUncheckedCreateInput) => {
-        entity.id = randomUUID();
-        entity.createdBy = entity.adminEmail;
-        entity.createdAt = new Date();
-        repositoryTemp.push(entity as any);
-        return entity;
-      });
-
-    postRepository.edit = jest
-      .fn()
-      .mockImplementation(
-        (entity: Prisma.PostUncheckedUpdateInput, postId: string) => {
-          const index = repositoryTemp.findIndex((item) => item.id === postId);
-          delete (entity as any).validate;
-          entity.updatedAt = new Date();
-          entity.updatedBy = entity.adminEmail;
-          repositoryTemp[index] = {
-            ...repositoryTemp[index],
-            ...entity,
-          } as any;
-          return repositoryTemp[index];
-        },
-      );
-
-    postRepository.remove = jest
-      .fn()
-      .mockImplementation(
-        (entity: Prisma.PostUncheckedUpdateInput, postId: string) => {
-          const index = repositoryTemp.findIndex((item) => item.id === postId);
-          delete (entity as any).validate;
-          entity.updatedAt = new Date();
-          entity.updatedBy = entity.adminEmail;
-          entity.deletedAt = entity.deletedAt;
-          entity.deletedBy = entity.adminEmail;
-          repositoryTemp[index] = {
-            ...repositoryTemp[index],
-            ...entity,
-          } as any;
-          return repositoryTemp[index];
-        },
-      );
-
-    postRepository.findOneByPostId = jest
-      .fn()
-      .mockImplementation(async (postId: string) => {
-        return repositoryTemp.find((item) => item.id === postId);
-      });
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
+  afterEach(() => {});
 
   describe('포스트', () => {
     it('등록 테스트', async () => {
@@ -104,11 +56,14 @@ describe('ServicePostService', () => {
 
       expect(postRepository.create).toBeCalled();
       expect(compareData).toEqual(toBe);
+
+      postId = toBe.id;
     });
 
     it('수정 테스트', async () => {
+      console.log(postRepositoryDB);
       const dto = new EditPostDto();
-      dto.id = repositoryTemp[0].id;
+      dto.id = postId;
       dto.title = '수정';
       dto.content = '수정';
       dto.thumbnailUrl = '수정된 썸네일 url';
@@ -139,7 +94,7 @@ describe('ServicePostService', () => {
 
     it('삭제 테스트', async () => {
       const dto = new RemovePostDto();
-      dto.id = repositoryTemp[0].id;
+      dto.id = postId;
       dto.adminEmail = 'mion2@gmail.com';
 
       const spyDto = jest.spyOn(dto, 'validate');
