@@ -9,6 +9,7 @@ import {
   Payload,
 } from '@nestjs/microservices';
 import { AsyncApiSub } from 'nestjs-asyncapi';
+import { CacheEvict } from '../../../libs/core/src';
 import { PostChannelEnum } from '../../../libs/microservice/src/enum/channel/post.channel.enum';
 import { CreatePostDto } from './dto/create.post.dto';
 import { EditPostDto } from './dto/edit.post.dto';
@@ -23,12 +24,10 @@ import { ServicePostService } from './service-post.service';
 
 @Controller()
 export class ServicePostController {
-
   constructor(
     private readonly servicePostService: ServicePostService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
-
 
   @AsyncApiSub({
     summary: '[어드민] 포스트 목록 조회',
@@ -96,7 +95,6 @@ export class ServicePostController {
   ) {
     const data = await this.servicePostService.findOneUsin(dto);
 
-
     // 어신 포스트 상세 조회 이벤트 발생
     await this.eventEmitter.emitAsync(
       PostEventEnum.POST_FIND_ONE_USIN,
@@ -114,6 +112,7 @@ export class ServicePostController {
       payload: CreatePostDto,
     },
   })
+  @CacheEvict('posts')
   @MessagePattern(PostChannelEnum.CREATE)
   async create(@Payload() dto: CreatePostDto, @Ctx() context: NatsContext) {
     const data = await this.servicePostService.create(dto);
@@ -128,6 +127,7 @@ export class ServicePostController {
       payload: EditPostDto,
     },
   })
+  @CacheEvict('posts')
   @MessagePattern(PostChannelEnum.EDIT)
   async edit(@Payload() dto: EditPostDto, @Ctx() context: NatsContext) {
     const data = await this.servicePostService.edit(dto);
@@ -142,6 +142,7 @@ export class ServicePostController {
       payload: EditPostDto,
     },
   })
+  @CacheEvict('posts')
   @MessagePattern(PostChannelEnum.REMOVE)
   async remove(@Payload() dto: RemovePostDto, @Ctx() context: NatsContext) {
     const data = await this.servicePostService.remove(dto);

@@ -6,4 +6,9 @@ export default registerAs(NatsConfigNameEnum.SERVICE_POST, () => ({
   microservice: {
     url: process.env.MICROSERVICE_URL,
   },
+  cache: {
+    host: process.env.CACHE_HOST ?? 'localhost',
+    port: process.env.CACHE_PORT ?? 6379,
+    ttl: process.env.CACHE_TTL ?? 1000,
+  },
 }));

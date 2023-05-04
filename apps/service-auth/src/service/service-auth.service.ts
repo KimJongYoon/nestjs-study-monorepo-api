@@ -26,7 +26,7 @@ export class ServiceUserAuthService {
   ) {}
 
   /**
-   * 사용자 인증(실패 시 401 에러)
+   * 어신 사용자 인증(실패 시 401 에러)
    * @param uid
    * @param password
    * @returns
