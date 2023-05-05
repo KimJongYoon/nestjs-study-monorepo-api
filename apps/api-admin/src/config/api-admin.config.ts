@@ -8,4 +8,8 @@ export default registerAs(NatsConfigNameEnum.API_ADMIN, () => ({
     url: process.env.MICROSERVICE_URL,
     timeout: process.env.MICROSERVICE_TIMEOUT,
   },
+  cors: {
+    domain: process.env.CORS_DOMAIN ?? '*',
+    methods: process.env.CORS_METHODS ?? '*',
+  },
 }));

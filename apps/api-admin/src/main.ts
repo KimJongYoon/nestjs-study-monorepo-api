@@ -15,16 +15,20 @@ import { ApiAdminModule } from './api-admin.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiAdminModule);
+
   const configService = app.get(ConfigService);
+  const config = configService.get(NatsConfigNameEnum.API_ADMIN);
 
   const httpAdapterHost = app.get(HttpAdapterHost);
   const reflector = app.get(Reflector);
 
+  app.enableCors({
+    origin: config.cors.domain,
+    methods: config.cors.methods,
+  });
   app.useGlobalFilters(new ApiExceptionsFilter(httpAdapterHost));
   app.useGlobalPipes(new ValidationPipe(GlobalValidationPipe));
   app.useGlobalInterceptors(new LoggingInterceptor());
-
-  const config = configService.get(NatsConfigNameEnum.API_ADMIN);
 
   const swaggerOptions = new DocumentBuilder()
     .setTitle('Admin API')
