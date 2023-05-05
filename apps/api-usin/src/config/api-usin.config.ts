@@ -13,4 +13,8 @@ export default registerAs(NatsConfigNameEnum.API_USIN, () => ({
     port: process.env.CACHE_PORT ?? 6379,
     ttl: process.env.CACHE_TTL ?? 1000,
   },
+  cors: {
+    domain: process.env.CORS_DOMAIN ?? '*',
+    methods: process.env.CORS_METHODS ?? '*',
+  },
 }));
