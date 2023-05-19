@@ -2,7 +2,7 @@ import { PickType } from '@nestjs/swagger';
 import { AssignHelper } from '../../../../../libs/core/src/helper/assign.helper';
 import { ViewUsinPostModel } from '../../../../../libs/database/src';
 
-const allowedKeys: string[] = [
+const allowedKeys: (keyof ViewUsinPostModel)[] = [
   'id',
   'title',
   'content',
@@ -11,7 +11,7 @@ const allowedKeys: string[] = [
 ];
 export class FindAllUsinPostResponse extends PickType(
   ViewUsinPostModel,
-  allowedKeys as (keyof ViewUsinPostModel)[],
+  allowedKeys,
 ) {
   constructor(data: ViewUsinPostModel) {
     super();
