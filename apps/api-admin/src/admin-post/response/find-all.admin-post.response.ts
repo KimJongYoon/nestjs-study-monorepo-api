@@ -2,7 +2,7 @@ import { PickType } from '@nestjs/swagger';
 import { AssignHelper } from '../../../../../libs/core/src/helper/assign.helper';
 import { ViewAdminPostModel } from '../../../../../libs/database/src';
 
-const allowedKeys: string[] = [
+const allowedKeys: (keyof ViewAdminPostModel)[] = [
   'id',
   'title',
   'thumbnailUrl',
@@ -11,7 +11,7 @@ const allowedKeys: string[] = [
 ];
 export class FindAllAdminPostResponse extends PickType(
   ViewAdminPostModel,
-  allowedKeys as (keyof ViewAdminPostModel)[],
+  allowedKeys,
 ) {
   constructor(data: ViewAdminPostModel) {
     super();
