@@ -4,8 +4,8 @@ import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 import { NatsBuildHelper } from '../../../../libs/microservice/src';
 import { PostChannelEnum } from '../../../../libs/microservice/src/enum/channel/post.channel.enum';
-import { FindAllViewUsinPostDto } from '../../../service-post/src/dto/find-all.view-usin-post.dto';
-import { FindOneViewUsinPostDto } from '../../../service-post/src/dto/find-one.view-usin-post.dto';
+import { FindAllViewUsinPostDto } from '../../../service-post/src/usin-post/dto/find-all.view-usin-post.dto';
+import { FindOneViewUsinPostDto } from '../../../service-post/src/usin-post/dto/find-one.view-usin-post.dto';
 import { FindAllUsinPostDto } from './dto/find-all.usin-post.dto';
 import { UsinPostServiceException } from './exception/usin-post.service.exception';
 

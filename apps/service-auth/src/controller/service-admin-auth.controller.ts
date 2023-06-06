@@ -25,7 +25,7 @@ export class ServiceAdminAuthController {
     },
   })
   @MessagePattern(AuthChannelEnum.ADMIN_VALIDATE)
-  async validateUsin(
+  async validateAccount(
     @Payload() dto: ValidateAdminAccountDto,
     @Ctx() context: NatsContext,
   ) {
@@ -43,7 +43,7 @@ export class ServiceAdminAuthController {
     },
   })
   @MessagePattern(AuthChannelEnum.ADMIN_SIGN_IN)
-  async signInUsin(
+  async signIn(
     @Payload() dto: SignInAdminAccountDto,
     @Ctx() context: NatsContext,
   ) {
@@ -61,7 +61,7 @@ export class ServiceAdminAuthController {
     },
   })
   @MessagePattern(AuthChannelEnum.ADMIN_VALIDATE_TOKEN)
-  async validateAccessTokenUsin(
+  async validateAccessToken(
     @Payload() dto: ValidateJwtAdminAccountDto,
     @Ctx() context: NatsContext,
   ) {

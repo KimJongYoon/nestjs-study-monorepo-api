@@ -10,15 +10,6 @@ import {
   NatsConfigNameEnum,
 } from '../../../libs/microservice/src';
 import postConfig from './config/post.config';
-import { ServicePostRepository } from './repository/service-post.repository';
-import { ViewAdminServicePostRepository } from './repository/view-admin.service-post.repository';
-import { ViewUsinServicePostRepository } from './repository/view-usin.service-post.repository';
-import { ServicePostController } from './service-post.controller';
-import { ServicePostListener } from './service-post.listener';
-import { ServicePostService } from './service-post.service';
-import { CommonPostValidator } from './validator/common.post.validator';
-import { EditPostValidator } from './validator/edit.post.validator';
-import { RemovePostValidator } from './validator/remove.post.validator';
 
 @Module({
   imports: [
@@ -45,20 +36,7 @@ import { RemovePostValidator } from './validator/remove.post.validator';
 
     UsinDatabaseModule,
   ],
-  controllers: [ServicePostController],
   providers: [
-    ServicePostService,
-
-    ServicePostListener,
-
-    ServicePostRepository,
-    ViewAdminServicePostRepository,
-    ViewUsinServicePostRepository,
-
-    CommonPostValidator,
-    EditPostValidator,
-    RemovePostValidator,
-
     {
       provide: APP_INTERCEPTOR,
       useClass: CacheInvalidationMicroserviceInterceptor,
