@@ -15,6 +15,7 @@ export class CacheConfigService implements CacheModuleOptions {
     const cacheUrl = `redis://${config.cache.host}:${config.cache.port}`;
     return {
       store: await redisStore({
+        url: cacheUrl,
         ttl: +config.cache.ttl,
       }),
       isGlobal: true,

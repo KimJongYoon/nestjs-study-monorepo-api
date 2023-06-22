@@ -23,7 +23,7 @@ export class ServiceUserAuthController {
     },
   })
   @MessagePattern(AuthChannelEnum.USIN_VALIDATE)
-  async validateUsin(
+  async validateAccount(
     @Payload() dto: ValidateUsinDto,
     @Ctx() context: NatsContext,
   ) {
@@ -38,7 +38,7 @@ export class ServiceUserAuthController {
     },
   })
   @MessagePattern(AuthChannelEnum.USIN_SIGN_IN)
-  async signInUsin(@Payload() dto: SignInUsinDto, @Ctx() context: NatsContext) {
+  async signIn(@Payload() dto: SignInUsinDto, @Ctx() context: NatsContext) {
     const data = await this.serviceAuthService.signInUsin(dto, context);
     return data;
   }
@@ -50,7 +50,7 @@ export class ServiceUserAuthController {
     },
   })
   @MessagePattern(AuthChannelEnum.USIN_VALIDATE_TOKEN)
-  async validateAccessTokenUsin(
+  async validateAccessToken(
     @Payload() dto: ValidateJwtUsinDto,
     @Ctx() context: NatsContext,
   ) {
