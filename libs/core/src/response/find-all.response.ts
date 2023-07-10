@@ -43,9 +43,9 @@ export class FindAllResponse {
   ) {
     this.statusCode = 200;
     this.message = '정상적으로 조회되었습니다.';
-    this.items = items;
-    this.count = count;
     this.page = pagination.page;
     this.size = pagination.size;
+    this.count = count;
+    this.items = items;
   }
 }

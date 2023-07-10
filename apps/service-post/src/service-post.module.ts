@@ -1,15 +1,17 @@
-import { CacheModule, Module } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { CacheConfigService } from '../../../libs/core/src';
-import { UsinDatabaseModule } from '../../../libs/database/src';
 import usinDatabaseConfig from '../../../libs/database/src/usin/usin.database.config';
 import {
   CacheInvalidationMicroserviceInterceptor,
   NatsConfigNameEnum,
 } from '../../../libs/microservice/src';
+import { AdminPostModule } from './admin-post/admin-post.module';
 import postConfig from './config/post.config';
+import { UsinPostModule } from './usin-post/usin-post.module';
 
 @Module({
   imports: [
@@ -34,7 +36,8 @@ import postConfig from './config/post.config';
       ],
     }),
 
-    UsinDatabaseModule,
+    AdminPostModule,
+    UsinPostModule,
   ],
   providers: [
     {

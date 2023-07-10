@@ -10,6 +10,7 @@ export class EditPostDto
       'title',
       'content',
       'thumbnailUrl',
+      'published',
       'adminEmail',
       'remark',
     ]),
