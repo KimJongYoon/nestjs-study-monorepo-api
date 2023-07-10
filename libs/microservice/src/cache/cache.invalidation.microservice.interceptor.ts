@@ -1,7 +1,7 @@
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CallHandler, ExecutionContext, Injectable } from '@nestjs/common';
 import { Observable, tap } from 'rxjs';
-import { CACHE_EVICT_METADATA } from '../../../core/src/cache/cache.evict.decorator';
+import { CACHE_EVICT_METADATA } from '../../../core/src';
 /**
  * 캐시 무효화 인터셉터
  * @description
@@ -36,12 +36,12 @@ export class CacheInvalidationMicroserviceInterceptor extends CacheInterceptor {
     const store = await this.cacheManager.store;
 
     const keys = await Promise.all(
-      evictKeys.map(async (key) => await store.keys(`*${key}*`)),
+      evictKeys.map(async (key) => await store.keys(`${key}*`)),
     );
 
     await Promise.all(
       keys.map(async (key) => {
-        await this.cacheManager.del(key);
+        Array.from(key).map(async (k) => await this.cacheManager.del(k)); // redis를 사용하지않은 인메모리 캐시에서는 keys가 iterable하지 않아서 Array.from으로 변환
       }),
     );
   }

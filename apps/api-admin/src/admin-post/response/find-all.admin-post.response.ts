@@ -1,5 +1,4 @@
-import { PickType } from '@nestjs/swagger';
-import { AssignHelper } from '../../../../../libs/core/src/helper/assign.helper';
+import { AbstractPickDataResponse } from '../../../../../libs/core/src/response/abstract.pick-data.response';
 import { ViewAdminPostModel } from '../../../../../libs/database/src';
 
 const allowedKeys: (keyof ViewAdminPostModel)[] = [
@@ -9,14 +8,11 @@ const allowedKeys: (keyof ViewAdminPostModel)[] = [
   'createdAt',
   'remark',
 ];
-export class FindAllAdminPostResponse extends PickType(
+export class FindAllAdminPostResponse extends AbstractPickDataResponse(
   ViewAdminPostModel,
   allowedKeys,
 ) {
   constructor(data: ViewAdminPostModel) {
-    super();
-
-    const filtered = AssignHelper.filter(data, allowedKeys);
-    Object.assign(this, filtered);
+    super(data);
   }
 }

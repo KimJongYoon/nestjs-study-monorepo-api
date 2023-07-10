@@ -4,7 +4,7 @@ services:
   study-usin-dev-db:
     image: arm64v8/mysql
     container_name: study-usin-dev-db
-    environment :
+    environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=admin1234
       - MYSQL_DATABASE=usin
@@ -13,11 +13,13 @@ services:
     ports:
       - 3307:3306
     command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - './volume/usin_mariadb:/var/lib/mysql'
 
   study-partners-dev-db:
     image: arm64v8/mysql
     container_name: study-partners-dev-db
-    environment :
+    environment:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_PASSWORD=admin1234
       - MYSQL_DATABASE=partners
@@ -26,25 +28,33 @@ services:
     ports:
       - 3308:3306
     command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - './volume/partners_mariadb:/var/lib/mysql'
 
     # 메시지 브로커(Nats) 클러스터링 설정
-  nats: 
+  nats:
     image: nats
     ports:
-      - "8222:8222"
-      - "4222:4222"
-    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --http_port 8222 "
-    networks: ["nats"]
+      - '8222:8222'
+      - '4222:4222'
+    command: '--cluster_name NATS --cluster nats://0.0.0.0:6222 --http_port 8222 '
+    networks: ['nats']
   nats-1:
     image: nats
-    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
-    networks: ["nats"]
-    depends_on: ["nats"]
+    command: '--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222'
+    networks: ['nats']
+    depends_on: ['nats']
   nats-2:
     image: nats
-    command: "--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222"
-    networks: ["nats"]
-    depends_on: ["nats"]
+    command: '--cluster_name NATS --cluster nats://0.0.0.0:6222 --routes=nats://ruser:T0pS3cr3t@nats:6222'
+    networks: ['nats']
+    depends_on: ['nats']
+
+  study-redis:
+    image: redis:alpine
+    #command: redis-server --port 6379
+    ports:
+      - 6379:6379
 
 networks:
   nats:

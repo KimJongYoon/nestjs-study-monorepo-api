@@ -7,6 +7,7 @@ export class CreatePostDto
   extends PickType(PostModel, [
     'title',
     'content',
+    'published',
     'thumbnailUrl',
     'adminEmail',
   ])
